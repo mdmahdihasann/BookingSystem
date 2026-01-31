@@ -1,12 +1,12 @@
 
 import React from "react";
 
-const Field = ({ children, htmlFor, label, error }) => {
+const Field = ({ children, htmlFor, label, error, className }) => {
     const id = htmlFor || getChildId(children);
     return (
         <>
             <div className="form-control">
-                {label && <label htmlFor={id} className="text-sm font-medium text-gray-700">{label}</label>}
+                {label && <label htmlFor={id} className={`text-sm font-medium text-gray-700 ${className}`}>{label}</label>}
                 {children}
                 {error && (
                     <div role="alert" className="text-red-500">

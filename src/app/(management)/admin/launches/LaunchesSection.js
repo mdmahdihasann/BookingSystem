@@ -11,7 +11,7 @@ const LaunchesSection = () => {
     return (
         <>
             <header className='flex items-center justify-between mb-5'>
-                <h2 className='text-md font-semibold text-gray-800'>All Launches</h2>
+                <h2 className='text-md font-semibold text-gray-800'>All Launch</h2>
                 <Button
                   type="primary"
                   onClick={() => setShowModal(true)}
