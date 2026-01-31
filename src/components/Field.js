@@ -1,0 +1,29 @@
+
+import React from "react";
+
+const Field = ({ children, htmlFor, label, error }) => {
+    const id = htmlFor || getChildId(children);
+    return (
+        <>
+            <div className="form-control">
+                {label && <label htmlFor={id} className="text-sm font-medium text-gray-700">{label}</label>}
+                {children}
+                {error && (
+                    <div role="alert" className="text-red-500">
+                        {error.message}
+                    </div>
+                )}
+            </div>
+        </>
+    );
+};
+
+const getChildId = (children) => {
+    const child = React.Children.only(children);
+    // eslint-disable-next-line no-unsafe-optional-chaining
+    if ("id" in child?.props) {
+        return child.props.id;
+    }
+};
+
+export default Field;
