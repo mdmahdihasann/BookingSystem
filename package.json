@@ -15,7 +15,6 @@
     "bcryptjs": "^3.0.3",
     "jsonwebtoken": "^9.0.3",
     "next": "16.1.4",
-    "prisma": "^6.19.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.1",
@@ -25,6 +24,7 @@
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "16.1.4",
+    "prisma": "^6.19.2",
     "tailwindcss": "^4"
   }
 }
