@@ -8,7 +8,7 @@ export function generateToken(payload) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 }
 
-// login করলে cookie set
+// cookie set
 export async function loginUser(user) {
   const token = generateToken({
     id: user.id,
@@ -24,7 +24,7 @@ export async function loginUser(user) {
   });
 }
 
-// token verify করার জন্য (middleware later use করবো)
+// token verify
 export function verifyToken(token) {
   return jwt.verify(token, JWT_SECRET);
 }
