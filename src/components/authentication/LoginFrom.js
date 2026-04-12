@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useAuth } from '@/hooks/useAuth'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
+import { loginUser } from "@/lib/auth";
 
 
 export const users = [{
@@ -17,9 +18,10 @@ const LoginFrom = () => {
     const router = useRouter();
     const { setAuth, loading, setLoading } = useAuth();
     const { register, handleSubmit } = useForm();
-    const onSubmit = (data) => {
+    const onSubmit = async(data) => {
         const user = users.find((u) => u.email === data.email && u.password === data.password);
         if (user) {
+            await loginUser(user)
             setAuth(data);
             toast.success("Login Successfully");
             router.push("/admin/dashboard")

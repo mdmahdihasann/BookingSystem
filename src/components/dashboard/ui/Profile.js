@@ -5,6 +5,8 @@ import { Button, Dropdown, Flex, Space } from 'antd';
 import { createStyles } from 'antd-style';
 import Image from 'next/image';
 import Sojibe from "../../../../public/sojibe.webp";
+
+
 const useStyles = createStyles(({ token }) => ({
   root: {
     backgroundColor: token.colorFillAlter,
@@ -12,6 +14,15 @@ const useStyles = createStyles(({ token }) => ({
     borderRadius: token.borderRadius,
   },
 }));
+
+
+
+function logout() {
+  sessionStorage.removeItem("authUser");
+  window.location.href = "/login";
+}
+
+
 const items = [
   {
     key: '1',
@@ -27,7 +38,7 @@ const items = [
   },
   {
     key: '3',
-    label: 'Logout',
+    label: <span onClick={logout}>Logout</span>,
     icon: <LogoutOutlined />,
     danger: true,
   },
@@ -68,7 +79,7 @@ const Profile = () => {
           <Button>
             <Space >
               <div className='flex gap-2 items-center'>
-                <Image src={Sojibe} width={60} height={40} className='w-[36px] h-[36px] rounded-full' alt='Sojibe'/>
+                <Image src={Sojibe} width={60} height={40} className='w-[36px] h-[36px] rounded-full' alt='Sojibe' />
                 <span>Mahdi Hasan</span>
               </div>
               <DownOutlined />
