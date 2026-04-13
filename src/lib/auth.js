@@ -16,7 +16,9 @@ export async function loginUser(user) {
     { expiresIn: "7d" }
   );
 
-  cookies().set("token", token, {
+  const cookieStore = await cookies();
+
+  cookieStore.set("token", token, {
     httpOnly: true,
     path: "/",
     sameSite: "strict",

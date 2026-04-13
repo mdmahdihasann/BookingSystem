@@ -1,10 +1,14 @@
 "use client"
 import Field from "@/components/Field"
+import { useState } from "react";
 import { useForm } from "react-hook-form"
 
 const FormPage = () => {
 
   const { handleSubmit, formState: { errors }, register } = useForm();
+  const [data, setData] = useState([]);
+  console.log(data);
+  
 
   const handleFromData = (fromData) => {
     const data = new FormData();
@@ -16,7 +20,7 @@ const FormPage = () => {
     if (fromData.image && fromData.image.length > 0) {
       data.append("image", fromData.image[0])
     }
-    console.log(data);
+    setData(fromData)
 
   }
   return (

@@ -5,6 +5,8 @@ import { Button, Dropdown, Flex, Space } from 'antd';
 import { createStyles } from 'antd-style';
 import Image from 'next/image';
 import Sojibe from "../../../../public/sojibe.webp";
+import { logoutUser } from '@/lib/logout';
+
 
 
 const useStyles = createStyles(({ token }) => ({
@@ -17,9 +19,8 @@ const useStyles = createStyles(({ token }) => ({
 
 
 
-function logout() {
-  sessionStorage.removeItem("authUser");
-  window.location.href = "/login";
+async function logout() {
+  await logoutUser();
 }
 
 
