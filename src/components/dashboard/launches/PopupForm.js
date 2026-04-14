@@ -11,7 +11,7 @@ const PopupForm = ({ open, onClose }) => {
       onCancel={onClose}
       footer
     >
-      <FormPage/>
+      <FormPage onClose={onClose} />
     </Modal>
   );
 };

@@ -1,27 +1,31 @@
 "use client"
 import Field from "@/components/Field"
-import { useState } from "react";
+import { addRow } from "@/redux/features/lounchtable/lounchTable";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
+import { useDispatch, useSelector } from "react-redux";
 
-const FormPage = () => {
+const FormPage = ({onClose}) => {
 
-  const { handleSubmit, formState: { errors }, register } = useForm();
-  const [data, setData] = useState([]);
-  console.log(data);
+  const { handleSubmit, formState: { errors }, register, reset } = useForm();
   
+  const dispatch = useDispatch();
+
+
 
   const handleFromData = (fromData) => {
-    const data = new FormData();
-    data.append("LauncheName", fromData.LauncheName)
-    data.append("phone", fromData.phone)
-    data.append("seatCapacity", fromData.seatCapacity)
-    data.append("time", fromData.time)
-    data.append("status", fromData.status)
-    if (fromData.image && fromData.image.length > 0) {
-      data.append("image", fromData.image[0])
-    }
-    setData(fromData)
-
+    const data = {
+      id: Date.now(),
+      LauncheName: fromData.LauncheName,
+      phone: fromData.phone,
+      seatCapacity: fromData.seatCapacity,
+      time: fromData.time,
+      status: fromData.status,
+      image: URL.createObjectURL(fromData.image[0])
+    };
+    dispatch(addRow(data));
+    reset();
+    onClose();
   }
   return (
     <form className="flex flex-col gap-2 mt-4" onSubmit={handleSubmit(handleFromData)}>
