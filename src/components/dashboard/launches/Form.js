@@ -1,14 +1,13 @@
 "use client"
 import Field from "@/components/Field"
 import { addRow } from "@/redux/features/lounchtable/lounchTable";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux";
 
-const FormPage = ({onClose}) => {
+const FormPage = ({ onClose }) => {
 
   const { handleSubmit, formState: { errors }, register, reset } = useForm();
-  
+  const editItem = useSelector((state)=>state.lounchtable.editItem)
   const dispatch = useDispatch();
 
 
@@ -23,7 +22,12 @@ const FormPage = ({onClose}) => {
       status: fromData.status,
       image: URL.createObjectURL(fromData.image[0])
     };
-    dispatch(addRow(data));
+
+    if (editItem) {
+      dispatch(updateRow({ ...data, id: editItem.id }));
+    } else {
+      dispatch(addRow(data));
+    }
     reset();
     onClose();
   }
@@ -32,7 +36,7 @@ const FormPage = ({onClose}) => {
       <Field label="Launche Name" className="font-semibold text-gray-700 text-[14px]" error={errors.LauncheName}>
         <input
           {...register("LauncheName", { required: "This Field is required" })}
-          type="text" id="LauncheName" placeholder="Launche Name" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
+          type="text" id="LauncheName" placeholder="Launche Name"  className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
       </Field>
       <Field label="Seat Capacity" className="font-semibold text-gray-700 text-[14px]" error={errors.seatCapacity}>
         <input

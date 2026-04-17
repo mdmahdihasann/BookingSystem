@@ -20,7 +20,7 @@ const LaunchesSection = () => {
                 </Button>
             </header>
 
-            <LaunchesTable />
+            <LaunchesTable setShowModal={setShowModal}/>
 
             <PopupForm
               open={showModal}

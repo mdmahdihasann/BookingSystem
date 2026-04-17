@@ -3,11 +3,10 @@
 import { Space, Table } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteRow, setEditItem } from "@/redux/features/lounchtable/lounchTable";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-const LaunchesTable = () => {
-  const [showModal, setShowModal] = useState(false);
+const LaunchesTable = ({ setShowModal }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.lounchtable.data);
   const editData = useSelector((state) => state.lounchtable.editItem);
@@ -17,16 +16,23 @@ const LaunchesTable = () => {
     dispatch(deleteRow(id));
   };
 
-  const handleEdit = (record) =>{
-    dispatch(setEditItem(record));
+  const handleEdit = (record) => {
     setShowModal(true);
+    dispatch(setEditItem(record));
   }
   useEffect(() => {
     if (editData) {
-      reset(editData);
+      reset({
+        LauncheName: editData?.LauncheName || "",
+        phone: editData?.phone || "",
+        seatCapacity: editData?.seatCapacity || "",
+        time: editData?.time || "",
+        status: editData?.status || "",
+        image: null
+      });
     }
-  }, [editData]);
-  
+  }, [editData, reset]);
+
   const columns = [
     {
       title: 'LauncheName',
@@ -53,7 +59,7 @@ const LaunchesTable = () => {
       key: 'status',
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={()=>handleEdit(record)}>Edit</a>
+          <a onClick={() => handleEdit(record)}>Edit</a>
           <a onClick={() => handleDelete(record.id)}>Delete</a>
         </Space>
       ),
