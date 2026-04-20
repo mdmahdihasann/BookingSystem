@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@prisma/client": "^6.19.2",
+    "@prisma/client": "^6.19.3",
     "@reduxjs/toolkit": "^2.11.2",
     "antd": "^6.2.2",
     "antd-style": "^4.1.0",
@@ -28,7 +28,7 @@
     "eslint": "^9",
     "eslint-config-next": "^15.5.15",
     "postcss": "^8.5.9",
-    "prisma": "^6.19.2",
+    "prisma": "^6.19.3",
     "tailwindcss": "^3.4.17"
   }
 }

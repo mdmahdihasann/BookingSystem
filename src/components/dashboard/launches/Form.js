@@ -7,20 +7,45 @@ import { useDispatch, useSelector } from "react-redux";
 const FormPage = ({ onClose }) => {
 
   const { handleSubmit, formState: { errors }, register, reset } = useForm();
-  const editItem = useSelector((state)=>state.lounchtable.editItem)
+  const editItem = useSelector((state) => state.lounchtable.editItem)
   const dispatch = useDispatch();
 
 
+  const createPost = async (e) => {
+    const url = "/api/lounchtable";
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(e)
+    })
+    const data = await res.json();
 
-  const handleFromData = (fromData) => {
+    console.log(data);
+
+    if (!res.ok) {
+      alert(data.error || "Something went wrong");
+      return;
+    }
+  }
+
+
+  const handleFromData = async (fromData) => {
+
+    try {
+      await createPost(fromData)
+    } catch (error) {
+      console.log("Error : ", error);
+    }
+
+
     const data = {
       id: Date.now(),
-      LauncheName: fromData.LauncheName,
+      lounch_name: fromData.lounch_name,
       phone: fromData.phone,
       seatCapacity: fromData.seatCapacity,
       time: fromData.time,
       status: fromData.status,
-      image: URL.createObjectURL(fromData.image[0])
+      image: fromData.image
     };
 
     if (editItem) {
@@ -33,15 +58,15 @@ const FormPage = ({ onClose }) => {
   }
   return (
     <form className="flex flex-col gap-2 mt-4" onSubmit={handleSubmit(handleFromData)}>
-      <Field label="Launche Name" className="font-semibold text-gray-700 text-[14px]" error={errors.LauncheName}>
+      <Field label="Launche Name" className="font-semibold text-gray-700 text-[14px]" error={errors.lounch_name}>
         <input
-          {...register("LauncheName", { required: "This Field is required" })}
-          type="text" id="LauncheName" placeholder="Launche Name"  className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
+          {...register("lounch_name", { required: "This Field is required" })}
+          type="text" id="lounch_name" placeholder="Launche Name" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
       </Field>
       <Field label="Seat Capacity" className="font-semibold text-gray-700 text-[14px]" error={errors.seatCapacity}>
         <input
           {...register("seatCapacity", { required: "This Field is required" })}
-          type="number" id="seatCapacity" placeholder="Seat Capacity" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
+          type="tel" id="seatCapacity" placeholder="Seat Capacity" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
       </Field>
       <Field label="Time" className="font-semibold text-gray-700 text-[14px]" error={errors.time}>
         <input
@@ -64,7 +89,7 @@ const FormPage = ({ onClose }) => {
       <Field label="Image" className="font-semibold text-gray-700 text-[14px]" error={errors.image}>
         <input
           {...register("image", { required: "This Field is required" })}
-          type="file" id="image" placeholder="Image" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
+          type="text" id="image" placeholder="Image" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
       </Field>
       <Field>
         <button type="submit" className='w-full bg-blue-600 py-2 text-white rounded-lg mt-2 font-semibold border-b-2 border-blue-300 hover:bg-blue-500 transition'>Submit</button>
