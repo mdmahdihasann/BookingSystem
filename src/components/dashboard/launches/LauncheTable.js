@@ -23,7 +23,7 @@ const LaunchesTable = ({ setShowModal }) => {
   useEffect(() => {
     if (editData) {
       reset({
-        LauncheName: editData?.LauncheName || "",
+        lounch_name: editData?.lounch_name || "",
         phone: editData?.phone || "",
         seatCapacity: editData?.seatCapacity || "",
         time: editData?.time || "",
@@ -35,9 +35,9 @@ const LaunchesTable = ({ setShowModal }) => {
 
   const columns = [
     {
-      title: 'LauncheName',
-      dataIndex: 'LauncheName',
-      key: 'LauncheName',
+      title: 'Lounch Name',
+      dataIndex: 'lounch_name',
+      key: 'lounch_name',
     },
     {
       title: 'phone',

@@ -65,8 +65,8 @@ const FormPage = ({ onClose }) => {
       </Field>
       <Field label="Seat Capacity" className="font-semibold text-gray-700 text-[14px]" error={errors.seatCapacity}>
         <input
-          {...register("seatCapacity", { required: "This Field is required" })}
-          type="tel" id="seatCapacity" placeholder="Seat Capacity" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
+          {...register("seat_capacity", { required: "This Field is required" })}
+          type="number" id="seat_capacity" placeholder="Seat Capacity" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
       </Field>
       <Field label="Time" className="font-semibold text-gray-700 text-[14px]" error={errors.time}>
         <input
