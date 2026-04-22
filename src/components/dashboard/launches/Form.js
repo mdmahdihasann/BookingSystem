@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 const FormPage = ({ onClose }) => {
 
   const { handleSubmit, formState: { errors }, register, reset } = useForm();
-  const editItem = useSelector((state) => state.lounchtable.editItem)
   const dispatch = useDispatch();
 
 
@@ -19,9 +18,7 @@ const FormPage = ({ onClose }) => {
       body: JSON.stringify(e)
     })
     const data = await res.json();
-
-    console.log(data);
-
+    dispatch(addRow(data));
     if (!res.ok) {
       alert(data.error || "Something went wrong");
       return;
@@ -32,27 +29,11 @@ const FormPage = ({ onClose }) => {
   const handleFromData = async (fromData) => {
 
     try {
-      await createPost(fromData)
+      await createPost(fromData);
     } catch (error) {
       console.log("Error : ", error);
     }
 
-
-    const data = {
-      id: Date.now(),
-      lounch_name: fromData.lounch_name,
-      phone: fromData.phone,
-      seatCapacity: fromData.seatCapacity,
-      time: fromData.time,
-      status: fromData.status,
-      image: fromData.image
-    };
-
-    if (editItem) {
-      dispatch(updateRow({ ...data, id: editItem.id }));
-    } else {
-      dispatch(addRow(data));
-    }
     reset();
     onClose();
   }

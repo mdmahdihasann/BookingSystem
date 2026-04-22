@@ -2,36 +2,40 @@
 
 import { Space, Table } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteRow, setEditItem } from "@/redux/features/lounchtable/lounchTable";
+import { deleteRow, setEditItem, setLounchTableData } from "@/redux/features/lounchtable/lounchTable";
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 const LaunchesTable = ({ setShowModal }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.lounchtable.data);
-  const editData = useSelector((state) => state.lounchtable.editItem);
   const { reset } = useForm();
+  const url = "/api/lounchtable/";
 
-  const handleDelete = (id) => {
-    dispatch(deleteRow(id));
-  };
 
-  const handleEdit = (record) => {
-    setShowModal(true);
-    dispatch(setEditItem(record));
+  const getData = async () => {
+
+    const res = await fetch(url);
+    const data = await res.json();
+    dispatch(setLounchTableData(data))
   }
   useEffect(() => {
-    if (editData) {
-      reset({
-        lounch_name: editData?.lounch_name || "",
-        phone: editData?.phone || "",
-        seatCapacity: editData?.seatCapacity || "",
-        time: editData?.time || "",
-        status: editData?.status || "",
-        image: null
-      });
+    getData();
+  }, [])
+
+  const handleDelete = async (data) => {
+    try {
+      await fetch(url, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      dispatch(deleteRow(data));
+    } catch (error) {
+      console.log("Delete error:", error);
     }
-  }, [editData, reset]);
+  };
+
 
   const columns = [
     {
@@ -45,9 +49,9 @@ const LaunchesTable = ({ setShowModal }) => {
       key: 'phone',
     },
     {
-      title: 'seatCapacity',
-      dataIndex: 'seatCapacity',
-      key: 'seatCapacity',
+      title: 'seat_capacity',
+      dataIndex: 'seat_capacity',
+      key: 'seat_capacity',
     },
     {
       title: 'time',
@@ -59,15 +63,15 @@ const LaunchesTable = ({ setShowModal }) => {
       key: 'status',
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => handleEdit(record)}>Edit</a>
-          <a onClick={() => handleDelete(record.id)}>Delete</a>
+          <a >Edit</a>
+          <a onClick={() => handleDelete(record)}>Delete</a>
         </Space>
       ),
     },
   ];
 
   return (
-    <Table columns={columns} dataSource={data} rowKey="id" />
+    <Table columns={columns} dataSource={data} />
   );
 };
 
