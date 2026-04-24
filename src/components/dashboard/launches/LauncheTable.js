@@ -2,7 +2,7 @@
 
 import { Space, Table } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteRow, setEditItem, setLounchTableData } from "@/redux/features/lounchtable/lounchTable";
+import { deleteRow, setLounchTableData } from "@/redux/features/lounchtable/lounchTable";
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -13,15 +13,19 @@ const LaunchesTable = ({ setShowModal }) => {
   const url = "/api/lounchtable/";
 
 
-  const getData = async () => {
-
-    const res = await fetch(url);
-    const data = await res.json();
-    dispatch(setLounchTableData(data))
-  }
   useEffect(() => {
+    const getData = async () => {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      dispatch(setLounchTableData(data))
+    }
+
     getData();
+
   }, [])
+
+
 
   const handleDelete = async (data) => {
     try {
@@ -44,22 +48,22 @@ const LaunchesTable = ({ setShowModal }) => {
       key: 'lounch_name',
     },
     {
-      title: 'phone',
+      title: 'Phone',
       dataIndex: 'phone',
       key: 'phone',
     },
     {
-      title: 'seat_capacity',
+      title: 'Seat Capacity',
       dataIndex: 'seat_capacity',
       key: 'seat_capacity',
     },
     {
-      title: 'time',
+      title: 'Time',
       dataIndex: 'time',
       key: 'time',
     },
     {
-      title: 'status',
+      title: 'Status',
       key: 'status',
       render: (_, record) => (
         <Space size="middle">
