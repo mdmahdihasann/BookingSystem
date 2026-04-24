@@ -26,6 +26,23 @@ const LaunchesTable = ({ setShowModal }) => {
   }, [])
 
 
+  const handleEdit = async (eData) => {
+    setShowModal(true)
+    try {
+      await fetch(`${url}/${eData.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(eData)
+      })
+    } catch (error) {
+      console.log(error);
+
+    }
+
+    setShowModal(true);
+  }
 
   const handleDelete = async (data) => {
     try {
@@ -67,7 +84,7 @@ const LaunchesTable = ({ setShowModal }) => {
       key: 'status',
       render: (_, record) => (
         <Space size="middle">
-          <a >Edit</a>
+          <a onClick={() => handleEdit(record)}>Edit</a>
           <a onClick={() => handleDelete(record)}>Delete</a>
         </Space>
       ),
