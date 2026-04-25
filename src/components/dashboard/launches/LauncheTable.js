@@ -2,14 +2,12 @@
 
 import { Space, Table } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteRow, setLounchTableData } from "@/redux/features/lounchtable/lounchTable";
+import { deleteRow, setLounchTableData, updatedRow } from "@/redux/features/lounchtable/lounchTable";
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 
-const LaunchesTable = ({ setShowModal }) => {
+const LaunchesTable = ({ handleEdit }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.lounchtable.data);
-  const { reset } = useForm();
   const url = "/api/lounchtable/";
 
 
@@ -24,25 +22,6 @@ const LaunchesTable = ({ setShowModal }) => {
     getData();
 
   }, [])
-
-
-  const handleEdit = async (eData) => {
-    setShowModal(true)
-    try {
-      await fetch(`${url}/${eData.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(eData)
-      })
-    } catch (error) {
-      console.log(error);
-
-    }
-
-    setShowModal(true);
-  }
 
   const handleDelete = async (data) => {
     try {

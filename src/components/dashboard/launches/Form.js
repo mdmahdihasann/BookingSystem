@@ -1,17 +1,43 @@
 "use client"
 import Field from "@/components/Field"
-import { addRow } from "@/redux/features/lounchtable/lounchTable";
+import { addRow, updateRow } from "@/redux/features/lounchtable/lounchTable";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux";
 
-const FormPage = ({ onClose }) => {
 
+const FormPage = ({ onClose }) => {
+  const editItem = useSelector((state) => state.lounchtable.editItem);
   const { handleSubmit, formState: { errors }, register, reset } = useForm();
   const dispatch = useDispatch();
+  const url = "/api/lounchtable";
 
 
+  useEffect(() => {
+    if (editItem) {
+      reset({
+        lounch_name: editItem.lounch_name,
+        seat_capacity: editItem.seat_capacity,
+        time: editItem.time,
+        phone: editItem.phone,
+        status: editItem.status ? 1 : 2,
+        image: editItem.image,
+      });
+    } else {
+      reset({
+        lounch_name: "",
+        seat_capacity: "",
+        time: "",
+        phone: "",
+        status: 1,
+        image: "",
+      })
+    }
+  }, [editItem, reset]);
+
+  // create data
   const createPost = async (e) => {
-    const url = "/api/lounchtable";
+
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -25,11 +51,36 @@ const FormPage = ({ onClose }) => {
     }
   }
 
+  // edit 
+  const editPost = async (e) => {
+    try {
+      const res = await fetch(`${url}/${editItem.id}`, {
+        method: 'PUT',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(e)
+      })
+      const eData = await res.json();
+      
+      dispatch(updateRow(eData))
+      if (!res.ok) {
+        alert(eData.error || "Something went wrong");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   const handleFromData = async (fromData) => {
 
     try {
-      await createPost(fromData);
+      if (editItem) {
+        await editPost(fromData)
+      } else {
+        await createPost(fromData);
+      }
+
     } catch (error) {
       console.log("Error : ", error);
     }
@@ -37,6 +88,9 @@ const FormPage = ({ onClose }) => {
     reset();
     onClose();
   }
+
+
+
   return (
     <form className="flex flex-col gap-2 mt-4" onSubmit={handleSubmit(handleFromData)}>
       <Field label="Launche Name" className="font-semibold text-gray-700 text-[14px]" error={errors.lounch_name}>
@@ -73,7 +127,7 @@ const FormPage = ({ onClose }) => {
           type="text" id="image" placeholder="Image" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
       </Field>
       <Field>
-        <button type="submit" className='w-full bg-blue-600 py-2 text-white rounded-lg mt-2 font-semibold border-b-2 border-blue-300 hover:bg-blue-500 transition'>Submit</button>
+        <button type="submit" className='w-full bg-blue-600 py-2 text-white rounded-lg mt-2 font-semibold border-b-2 border-blue-300 hover:bg-blue-500 transition'>{editItem ? "Update" : "Create"}</button>
       </Field>
     </form>
   )

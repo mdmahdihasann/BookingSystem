@@ -6,6 +6,7 @@ import { createStyles } from 'antd-style';
 import Image from 'next/image';
 import Sojibe from "../../../../public/sojibe.webp";
 import { logoutUser } from '@/lib/logout';
+import { useRouter } from 'next/router';
 
 
 
@@ -20,7 +21,9 @@ const useStyles = createStyles(({ token }) => ({
 
 
 async function logout() {
+  const route = useRouter();
   await logoutUser();
+  route.push("/")
 }
 
 

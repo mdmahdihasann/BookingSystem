@@ -32,36 +32,6 @@ export async function POST(req) {
   }
 }
 
-
-export async function PUT(req,) {
-  try {
-    const body = await req.json();
-
-    const updatedData = await prisma.lounchTable.update({
-      where: { id },
-      data: {
-        lounch_name: body.lounch_name,
-        seat_capacity: Number(body.seat_capacity),
-        time: body.time,
-        phone: body.phone,
-        status: body.status === true || body.status === "true",
-        image: body.image || "",
-      },
-    });
-
-    return NextResponse.json({ success: true, data: updatedData });
-
-  } catch (error) {
-    console.error("UPDATE ERROR:", error);
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    );
-  }
-}
-
-
-
 export async function DELETE(req) {
   const { id } = await req.json();
   await prisma.lounchTable.delete({
