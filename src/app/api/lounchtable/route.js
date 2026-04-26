@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const data = await prisma.lounchTable.findMany();
+  const data = await prisma.launch.findMany();
   return Response.json(data);
 }
 
@@ -13,15 +13,20 @@ export async function POST(req) {
   try {
     const body = await req.json();
 
-    const newData = await prisma.lounchTable.create({
+    const newData = await prisma.launch.create({
       data: {
-        lounch_name: body.lounch_name,
-        seat_capacity: Number(body.seat_capacity),
-        time: body.time,
+        name: body.name,
+        from: body.from,
+        to: body.to,
+        seatCapacity: Number(body.seatCapacity),
+        availableSeat: Number(body.availableSeat),
+        departureTime: new Date(body.departureTime),
+        arrivalTime: new Date(body.arrivalTime),
         phone: body.phone,
-        status: body.status === true || body.status === "true",
-        image: body.image || "",
-      },
+        price: Number(body.price),
+        status: body.status === true || body.status === "true", 
+        image: body.image
+      }
     });
 
     return NextResponse.json({ success: true, data: newData });
@@ -34,7 +39,7 @@ export async function POST(req) {
 
 export async function DELETE(req) {
   const { id } = await req.json();
-  await prisma.lounchTable.delete({
+  await prisma.launch.delete({
     where: { id }
   })
   return Response.json({ success: true })

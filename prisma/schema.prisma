@@ -14,20 +14,63 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
   password  String
-  role      String   @default("USER")
-  createdAt DateTime @default(now())
+  phone     String
+  role      String    @default("USER")
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  bookings  Booking[]
 }
 
-model LounchTable {
+model Launch {
   id            String   @id @default(uuid())
-  lounch_name   String
-  seat_capacity Int
-  time          String
+  name          String
+
+  from          String
+  to            String
+
+  departureTime DateTime
+  arrivalTime   DateTime
+
+  seatCapacity  Int
+  availableSeat Int
+
+  price         Float
+
   phone         String?
-  status        Boolean  @default(true)
   image         String?
+
+  status        Boolean  @default(true)
+
   createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  bookings      Booking[]
+}
+
+model Booking {
+  id          String   @id @default(uuid())
+
+  userId      String
+  launchId    String
+
+  seatNumber  String
+  passengerName String
+  passengerPhone String?
+
+  price       Float
+  status      String   @default("PENDING") 
+
+  bookingDate DateTime @default(now())
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  launch Launch @relation(fields: [launchId], references: [id])
 }

@@ -4,6 +4,7 @@ import { Space, Table } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteRow, setLounchTableData, updatedRow } from "@/redux/features/lounchtable/lounchTable";
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 const LaunchesTable = ({ handleEdit }) => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const LaunchesTable = ({ handleEdit }) => {
         body: JSON.stringify(data)
       })
       dispatch(deleteRow(data));
+      toast.success("Items Delete Successfully")
     } catch (error) {
       console.log("Delete error:", error);
     }
@@ -40,8 +42,8 @@ const LaunchesTable = ({ handleEdit }) => {
   const columns = [
     {
       title: 'Lounch Name',
-      dataIndex: 'lounch_name',
-      key: 'lounch_name',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
       title: 'Phone',
@@ -50,13 +52,13 @@ const LaunchesTable = ({ handleEdit }) => {
     },
     {
       title: 'Seat Capacity',
-      dataIndex: 'seat_capacity',
-      key: 'seat_capacity',
+      dataIndex: 'seatCapacity',
+      key: 'seatCapacity',
     },
     {
-      title: 'Time',
-      dataIndex: 'time',
-      key: 'time',
+      title: 'Arrival Time',
+      dataIndex: 'arrivalTime',
+      key: 'arrivalTime',
     },
     {
       title: 'Status',

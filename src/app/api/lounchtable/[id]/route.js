@@ -6,15 +6,20 @@ export async function PUT(req, { params }) {
     const id = params.id;
     const body = await req.json();
 
-    const updatedData = await prisma.lounchTable.update({
+    const updatedData = await prisma.launch.update({
       where: { id },
       data: {
-        lounch_name: body.lounch_name,
-        seat_capacity: Number(body.seat_capacity),
-        time: body.time,
+        name: body.name,
+        from: body.from,
+        to: body.to,
+        seatCapacity: Number(body.seatCapacity),
+        availableSeat: Number(body.availableSeat),
+        departureTime: new Date(body.departureTime),
+        arrivalTime: new Date(body.arrivalTime),
         phone: body.phone,
-        status: body.status === true || body.status === "true",
-        image: body.image || "",
+        price: Number(body.price),
+        status: body.status === true || body.status === "true", 
+        image: body.image
       },
     });
 
