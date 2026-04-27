@@ -1,6 +1,7 @@
 "use client"
 import Field from "@/components/Field"
 import { addRow, updateRow } from "@/redux/features/lounchtable/lounchTable";
+import formateDate from "@/utils/formateDate";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast";
@@ -26,12 +27,14 @@ const FormPage = ({ onClose }) => {
         availableSeat: "",
         price: "",
         phone: "",
-        status: true,
+        status: "1",
         image: "",
       });
       return;
     }
 
+    
+    
     reset({
       name: editItem.name || "",
       from: editItem.from || "",
@@ -42,7 +45,7 @@ const FormPage = ({ onClose }) => {
       availableSeat: editItem.availableSeat || "",
       price: editItem.price || "",
       phone: editItem.phone || "",
-      status: editItem.status ?? true,
+      status: editItem.status === true ? "1" : "2",
       image: editItem.image || "",
     });
   }, [editItem, reset]);

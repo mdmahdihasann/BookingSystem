@@ -14,25 +14,26 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
+  id        String   @id @default(uuid())
   name      String
-  email     String    @unique
+  email     String   @unique
   password  String
   phone     String
-  role      String    @default("USER")
-  isActive  Boolean   @default(true)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  image     String?
+  role      String   @default("USER")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  bookings  Booking[]
+  bookings Booking[]
 }
 
 model Launch {
-  id            String   @id @default(uuid())
-  name          String
+  id   String @id @default(uuid())
+  name String
 
-  from          String
-  to            String
+  from String
+  to   String
 
   departureTime DateTime
   arrivalTime   DateTime
@@ -40,36 +41,36 @@ model Launch {
   seatCapacity  Int
   availableSeat Int
 
-  price         Float
+  price Float
 
-  phone         String?
-  image         String?
+  phone String?
+  image String?
 
-  status        Boolean  @default(true)
+  status Boolean @default(true)
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  bookings      Booking[]
+  bookings Booking[]
 }
 
 model Booking {
-  id          String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  userId      String
-  launchId    String
+  userId   String
+  launchId String
 
-  seatNumber  String
-  passengerName String
+  seatNumber     String
+  passengerName  String
   passengerPhone String?
 
-  price       Float
-  status      String   @default("PENDING") 
+  price  Float
+  status String @default("PENDING")
 
   bookingDate DateTime @default(now())
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   user   User   @relation(fields: [userId], references: [id])
   launch Launch @relation(fields: [launchId], references: [id])

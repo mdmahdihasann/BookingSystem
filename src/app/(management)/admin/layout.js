@@ -32,7 +32,7 @@ const items = [
     getItem(<Link href="/admin/payments">Payments</Link>, '5', <MdOutlinePayments />),
     getItem(<Link href="/admin/reports">Reports</Link>, '6', <TbReportSearch />),
     getItem(<Link href="/admin/staff">Staff</Link>, '7', <TbUsersGroup />),
-    getItem(<Link href="/admin/settings">Settings</Link>, '8', <IoSettingsOutline />),
+    getItem(<Link href="/admin/profile">Profile</Link>, '8', <IoSettingsOutline />),
 ];
 
 const AdminLayout = ({ children }) => {

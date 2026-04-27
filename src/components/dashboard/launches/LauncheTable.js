@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { deleteRow, setLounchTableData, updatedRow } from "@/redux/features/lounchtable/lounchTable";
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
+import formateDate from '@/utils/formateDate';
 
 const LaunchesTable = ({ handleEdit }) => {
   const dispatch = useDispatch();
@@ -59,6 +60,7 @@ const LaunchesTable = ({ handleEdit }) => {
       title: 'Arrival Time',
       dataIndex: 'arrivalTime',
       key: 'arrivalTime',
+      render: (text) => formateDate(text),
     },
     {
       title: 'Status',
