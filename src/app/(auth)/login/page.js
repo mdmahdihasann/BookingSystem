@@ -1,29 +1,29 @@
-import Image from "next/image"
-import Logo from "../../../../public/Logo.png"
+
+import Link from "next/link"
+import bg from "../../../../public/bg.jpg"
 import LoginFrom from "@/components/authentication/LoginFrom"
 const page = () => {
     return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="flex flex-col md:flex-row w-full max-w-3xl gap-2 bg-gray-200 p-2 md:p-2 rounded-2xl mx-auto">
-                <div className="bg-blue-700 w-full md:w-1/2 h-64 md:h-[380px] flex flex-col items-center justify-center rounded-xl">
-                    <Image
-                        src={Logo}
-                        width={120}
-                        height={120}
-                        alt="Logo"
-                        priority
-                    />
-                </div>
-
-                <div className="flex flex-col justify-center w-full md:w-1/2 p-2 md:p-4">
-                    <h1 className="mb-4 text-lg md:text-xl font-semibold text-gray-800">
-                        Please Login your Credentials
+        <div className="min-h-screen flex items-center justify-end bg-cover bg-center relative" style={{ backgroundImage: `url(${bg.src})` }}>
+            <div className="absolute inset-0 bg-black/20"></div>
+            <div className="flex flex-col justify-center w-full md:w-[500px] bg-white min-h-screen rounded-tl-[40px] rounded-bl-[40px] px-10 z-10">
+                <div className="mb-8">
+                    <h1 className="text-lg md:text-xl font-serif font-medium text-gray-800 mb-1">
+                        Welcome to Norothy.
                     </h1>
-                    <LoginFrom />
+                    <p className="text-sm font-serif font-normal text-gray-600">Let's hel you get strand</p>
+                </div>
+                <LoginFrom />
+
+                <div>
+                    <hr className="mt-10 mb-8" />
+                    <p className="text-sm font-serif font-normal text-gray-600 text-end">Have a dont't account? <Link className='font-semibold text-blue-700 hover:text-blue-500 transition' href="/register" >Sign up</Link></p>
                 </div>
             </div>
-
-
+            <div className="text-sm text-white px-4 py-2.5 rounded-lg absolute top-4 left-4 
+bg-white-500/20 backdrop-blur-md border border-white-500/20 font-serif">
+                Back to Home
+            </div>
         </div>
     )
 }

@@ -2,42 +2,29 @@
 import React from 'react'
 import Field from '../Field'
 import { useForm } from 'react-hook-form'
-import { useAuth } from '@/hooks/useAuth'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
-import { loginUser } from "@/lib/auth";
-import Link from 'next/link'
 
-
-export const users = [{
-    email: "admin@gmail.com",
-    password: "123456",
-}]
-
-
-const LoginFrom = () => {
-    const router = useRouter();
-    const { setAuth, loading, setLoading } = useAuth();
+const RegisterFrom = () => {
     const { register, handleSubmit } = useForm();
-    const onSubmit = async(data) => {
-        const user = users.find((u) => u.email === data.email && u.password === data.password);
-        if (user) {
-            await loginUser(user)
-            setAuth(data);
-            toast.success("Login Successfully");
-            router.push("/admin/dashboard")
-        } else {
-            toast.error("no match")
-        }
 
+    const onSubmit = (data)=>{
+        console.log(data);
     }
+    
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className='flex flex-col gap-2'>
 
+                    <Field label="Name">
+                        <input type='text' {...register("name")} id='name' className='w-full bg-blue-50 border border-blue-200 px-2 py-1.5 rounded-lg mt-1' />
+                    </Field>
                     <Field label="Email">
                         <input type='text' {...register("email")} id='email' className='w-full bg-blue-50 border border-blue-200 px-2 py-1.5 rounded-lg mt-1' />
+                    </Field>
+                    <Field label="Phone">
+                        <input type='number' {...register("phone")} id='phone' className='w-full bg-blue-50 border border-blue-200 px-2 py-1.5 rounded-lg mt-1' />
                     </Field>
                     <Field label="Password">
                         <input type='password' {...register("password")} id='password' className='w-full bg-blue-50 border border-blue-200 px-2 py-1.5 rounded-lg mt-1' />
@@ -47,9 +34,8 @@ const LoginFrom = () => {
                     <button type='submit' className='bg-blue-700 px-6 py-2 text-sm text-white rounded-lg hover:bg-blue-600 transition mt-4'>Login</button>
                 </Field>
             </form>
-
         </>
     )
 }
 
-export default LoginFrom
+export default RegisterFrom
