@@ -2,32 +2,37 @@
 import React from 'react'
 import Field from '../Field'
 import { useForm } from 'react-hook-form'
-import { useAuth } from '@/hooks/useAuth'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
-import { loginUser } from "@/lib/auth";
-import Link from 'next/link'
-
-
-export const users = [{
-    email: "admin@gmail.com",
-    password: "123456",
-}]
+import { loginUser } from '@/lib/auth'
 
 
 const LoginFrom = () => {
     const router = useRouter();
-    const { setAuth, loading, setLoading } = useAuth();
     const { register, handleSubmit } = useForm();
-    const onSubmit = async(data) => {
-        const user = users.find((u) => u.email === data.email && u.password === data.password);
-        if (user) {
-            await loginUser(user)
-            setAuth(data);
-            toast.success("Login Successfully");
-            router.push("/admin/dashboard")
-        } else {
-            toast.error("no match")
+    const onSubmit = async (data) => {
+        try {
+            const res = await fetch("/api/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            const logData = await res.json();
+            loginUser(logData)
+            if (res.status === 200) {
+                if (logData.user.role === "admin") {
+                    router.push("/admin/dashboard/")
+                } else {
+                    router.push("/admin/user")
+                }
+
+                toast.success("Login Successfully");
+            } else {
+                toast.error(logData.message)
+            }
+        } catch (error) {
+            console.log(error);
+
         }
 
     }

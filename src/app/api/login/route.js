@@ -1,31 +1,32 @@
 import { prisma } from "@/lib/prisma";
-import { comparePassword } from "@/lib/hash";
-import { loginUser } from "@/lib/auth";
+import { NextResponse } from "next/server";
+import { compare } from "bcryptjs";
+
 
 export async function POST(req) {
-  const { email, password } = await req.json();
+  try {
+    const body = await req.json();
+    const user = await prisma.user.findUnique({
+      where: { email: body.email }
+    });
 
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
+    if (!user) {
+      return NextResponse.json({ success: false, message: "user not found" }, { status: 404 });
+    }
 
-  if (!user) {
-    return Response.json(
-      { message: "Invalid Credentials" },
-      { status: 401 }
-    );
+    const isMatch = await compare(body.password, user.password);
+    if (!isMatch) {
+      return NextResponse.json({ success: false, message: "wrong password" }, { status: 401 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Login Successfully',
+      user
+    }, { status: 200 })
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
-
-  const isValid = await comparePassword(password, user.password);
-
-  if (!isValid) {
-    return Response.json(
-      { message: "Invalid Credentials" },
-      { status: 401 }
-    );
-  }
-
-  await loginUser(user);
-
-  return Response.json({ message: "Login successful" });
 }
+
+

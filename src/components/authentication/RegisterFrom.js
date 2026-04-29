@@ -6,12 +6,28 @@ import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 
 const RegisterFrom = () => {
+    const route = useRouter();
     const { register, handleSubmit } = useForm();
 
-    const onSubmit = (data)=>{
-        console.log(data);
+    const onSubmit = async (data) => {
+        try {
+            const res = await fetch("/api/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            const datas = await res.json();
+
+            if (res.status === 200) {
+                toast.success("Registration successfully");
+                route.push("/login")
+            }
+        } catch (error) {
+            console.log("Error:", error);
+
+        }
     }
-    
+
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -31,7 +47,7 @@ const RegisterFrom = () => {
                     </Field>
                 </div>
                 <Field>
-                    <button type='submit' className='bg-blue-700 px-6 py-2 text-sm text-white rounded-lg hover:bg-blue-600 transition mt-4'>Login</button>
+                    <button type='submit' className='bg-blue-700 px-6 py-2 text-sm text-white rounded-lg hover:bg-blue-600 transition mt-4'>Register</button>
                 </Field>
             </form>
         </>
