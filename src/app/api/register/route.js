@@ -16,8 +16,6 @@ export async function POST(req) {
         role: "user",
         isActive: body.isActive,
         bookings: body.bookings
-          ? { create: body.bookings }
-          : undefined
       }
     })
     return NextResponse.json({ success: true, data: regData }, { status: 200 });

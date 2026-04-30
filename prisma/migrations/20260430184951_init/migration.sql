@@ -5,6 +5,7 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
+    "image" TEXT,
     "role" TEXT NOT NULL DEFAULT 'USER',
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
