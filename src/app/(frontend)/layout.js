@@ -1,5 +1,5 @@
 import { Ubuntu } from "next/font/google";
-import { Menu } from "antd";
+import { Button, Menu } from "antd";
 import { Header } from "antd/es/layout/layout";
 import Link from "next/link";
 import Logo from "../../../public/Logo.png";
@@ -23,12 +23,27 @@ export default function FrontendLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${ubuntu.variable} font-sans`}>
-        <Header>
-          <div>
-            <Image src={Logo} width={100} height={100} alt="Logo" priority />
+        <Header className="w-full bg-blue-700">
+          <div className="max-w-7xl mx-auto px-4 flex items-center justify-between py-3">
+            {/* Logo */}
+            <div>
+              <Image src={Logo} width={100} height={40} alt="Logo" priority />
+            </div>
+
+            {/* Menu */}
+            <Menu
+              theme="white"
+              mode="horizontal"
+              items={items}
+              className="flex-1 justify-center border-none bg-blue-700 text-white"
+            />
+
+            {/* Auth Buttons */}
+            <div className="flex gap-2">
+              <Button >Sign In</Button>
+              <Button >Sign Up</Button>
+            </div>
           </div>
-          <Menu theme="white" mode="horizontal" items={items} />
-          <div></div>
         </Header>
         {children}
       </body>

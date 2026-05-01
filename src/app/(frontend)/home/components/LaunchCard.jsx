@@ -1,0 +1,98 @@
+const LaunchCard = ({ launch }) => {
+  return (
+    <div className="flex flex-col items-end pb-20 relative">
+      <div className="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <h2 className="text-2xl font-semibold text-black mb-6">Find Your Next Launch</h2>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Card */}
+        <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+          {/* IMAGE */}
+          <div className="h-44 w-full relative">
+            <img
+              src={
+                launch?.image ||
+                "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957"
+              }
+              alt="launch"
+              className="w-full h-full object-cover"
+            />
+
+            {/* status badge */}
+            <span className="absolute top-3 right-3 text-xs bg-green-500 text-white px-3 py-1 rounded-full">
+              {launch?.status ? "Available" : "Closed"}
+            </span>
+          </div>
+
+          {/* CONTENT */}
+          <div className="p-5">
+            {/* NAME + ROUTE */}
+            <div>
+              <h3 className="text-lg font-bold text-gray-800">
+                {launch?.name || "MV Green Line"}
+              </h3>
+
+              <p className="text-sm text-gray-500 mt-1">
+                {launch?.from || "Bhola"} → {launch?.to || "Barishal"}
+              </p>
+            </div>
+
+            {/* TIME */}
+            <div className="mt-3 flex justify-between text-sm text-gray-700">
+              <div>
+                <p className="font-semibold">Departure</p>
+                <p>{launch?.departureTime || "08:00 AM"}</p>
+              </div>
+              <div>
+                <p className="font-semibold">Arrival</p>
+                <p>{launch?.arrivalTime || "12:30 PM"}</p>
+              </div>
+            </div>
+
+            {/* SEAT INFO */}
+            <div className="mt-4 space-y-2 text-sm">
+              <div className="flex justify-between bg-gray-50 px-3 py-2 rounded-lg">
+                <span>Upper Deck</span>
+                <span className="font-semibold">{launch?.upperSeat || 20}</span>
+              </div>
+
+              <div className="flex justify-between bg-gray-50 px-3 py-2 rounded-lg">
+                <span>Lower Deck</span>
+                <span className="font-semibold">{launch?.lowerSeat || 30}</span>
+              </div>
+
+              <div className="flex justify-between bg-gray-50 px-3 py-2 rounded-lg">
+                <span>Cabin (Single / VIP)</span>
+                <span className="font-semibold">{launch?.cabin || 5}</span>
+              </div>
+            </div>
+
+            {/* PRICE */}
+            <div className="mt-4 flex justify-between items-center">
+              <div>
+                <p className="text-xs text-gray-500">Starting From</p>
+                <p className="text-xl font-bold text-blue-600">
+                  ৳{launch?.price || 500}
+                </p>
+              </div>
+
+              <div className="text-right">
+                <p className="text-xs text-gray-500">Per Seat Type</p>
+                <p className="text-sm font-semibold text-gray-700">
+                  Economy / Cabin
+                </p>
+              </div>
+            </div>
+
+            {/* BUTTON */}
+            <button className="mt-5 w-full bg-blue-600 text-white py-2.5 rounded-xl hover:bg-blue-700 transition font-semibold">
+              Book Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LaunchCard;
