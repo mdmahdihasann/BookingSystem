@@ -9,6 +9,7 @@ const PopupForm = ({ open, onClose }) => {
       open={open}
       onOk={onClose}
       onCancel={onClose}
+      width={800} 
       footer
     >
       <FormPage onClose={onClose} />

@@ -1,178 +1,247 @@
-"use client"
-import Field from "@/components/Field"
+"use client";
+
+import Field from "@/components/Field";
 import { addRow, updateRow } from "@/redux/features/lounchtable/lounchTable";
-import formateDate from "@/utils/formateDate";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Input, Row, Select, Space } from "antd";
+import { Group } from "antd/es/radio";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form"
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
-
 const FormPage = ({ onClose }) => {
   const editItem = useSelector((state) => state.lounchtable.editItem);
-  const { handleSubmit, formState: { errors }, register, reset } = useForm();
   const dispatch = useDispatch();
   const url = "/api/lounchtable";
 
+  const {
+    handleSubmit,
+    register,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      from: "",
+      to: "",
+      departureTime: "",
+      arrivalTime: "",
+      seatCapacity: "",
+      availableSeat: "",
+      price: "",
+      phone: "",
+      status: "1",
+      image: "",
+      seatTypes: [
+        {
+          name: "",
+          price: "",
+          available: "",
+        },
+      ],
+    },
+  });
+
+  const {
+    fields: seatTypeFields,
+    append: appendSeatType,
+    remove: removeSeatType,
+  } = useFieldArray({
+    control,
+    name: "seatTypes",
+  });
 
   useEffect(() => {
-    if (!editItem) {
-      reset({
-        name: "",
-        from: "",
-        to: "",
-        departureTime: "",
-        arrivalTime: "",
-        seatCapacity: "",
-        availableSeat: "",
-        price: "",
-        phone: "",
-        status: "1",
-        image: "",
-      });
-      return;
-    }
+    if (!editItem) return;
 
-    
-    
     reset({
-      name: editItem.name || "",
-      from: editItem.from || "",
-      to: editItem.to || "",
-      departureTime: editItem.departureTime || "",
-      arrivalTime: editItem.arrivalTime || "",
-      seatCapacity: editItem.seatCapacity || "",
-      availableSeat: editItem.availableSeat || "",
-      price: editItem.price || "",
-      phone: editItem.phone || "",
-      status: editItem.status === true ? "1" : "2",
-      image: editItem.image || "",
+      ...editItem,
+      seatTypes: editItem.seatTypes?.length
+        ? editItem.seatTypes
+        : [
+            {
+              name: "",
+              price: "",
+              available: "",
+            },
+          ],
     });
   }, [editItem, reset]);
 
-  // create data
-  const createPost = async (e) => {
-
-    const res = await fetch(url, {
-      method: "POST",
+  const onSubmit = async (data) => {
+    const res = await fetch(editItem ? `${url}/${editItem.id}` : url, {
+      method: editItem ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(e)
-    })
-    const data = await res.json();
-    dispatch(addRow(data));
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+
     if (!res.ok) {
-      alert(data.error || "Something went wrong");
+      toast.error(result.error || "Error");
       return;
     }
-  }
 
-  // edit 
-  const editPost = async (e) => {
-    try {
-      const res = await fetch(`${url}/${editItem.id}`, {
-        method: 'PUT',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(e)
-      })
-      const eData = await res.json();
-
-      dispatch(updateRow(eData))
-      if (!res.ok) {
-        alert(eData.error || "Something went wrong");
-        return;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-
-  const handleFromData = async (fromData) => {
-
-    try {
-      if (editItem) {
-        await editPost(fromData);
-        toast.success("Items Updated Successfully")
-      } else {
-        await createPost(fromData);
-        toast.success("Items Create Successfully")
-      }
-
-    } catch (error) {
-      console.log("Error : ", error);
-    }
+    dispatch(editItem ? updateRow(result) : addRow(result));
+    toast.success(editItem ? "Updated Successfully" : "Created Successfully");
 
     reset();
     onClose();
-  }
-
-
+  };
 
   return (
-    <form className="flex flex-col gap-2 mt-4" onSubmit={handleSubmit(handleFromData)}>
-      <Field label="Launche Name" className="font-semibold text-gray-700 text-[14px]" error={errors.lounch_name}>
-        <input
-          {...register("name", { required: "This Field is required" })}
-          type="text" id="name" placeholder="Launche Name" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
-      </Field>
-      <Field label="Seat Capacity" className="font-semibold text-gray-700 text-[14px]" error={errors.seatCapacity}>
-        <input
-          {...register("seatCapacity", { required: "This Field is required" })}
-          type="number" id="seatCapacity" placeholder="Seat Capacity" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
-      </Field>
-      <Field label="From" className="font-semibold text-gray-700 text-[14px]" error={errors.time}>
-        <input
-          {...register("from", { required: "This Field is required" })}
-          type="text" id="from" placeholder="from" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
-      </Field>
-      <Field label="To" className="font-semibold text-gray-700 text-[14px]" error={errors.time}>
-        <input
-          {...register("to", { required: "This Field is required" })}
-          type="text" id="to" placeholder="to" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
-      </Field>
-      <Field label="Departure Time" className="font-semibold text-gray-700 text-[14px]" error={errors.time}>
-        <input
-          {...register("departureTime", { required: "This Field is required" })}
-          type="datetime-local" id="departureTime" placeholder="departureTime" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
-      </Field>
-      <Field label="Arrival Time" className="font-semibold text-gray-700 text-[14px]" error={errors.time}>
-        <input
-          {...register("arrivalTime", { required: "This Field is required" })}
-          type="datetime-local" id="arrivalTime" placeholder="arrivalTime" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
-      </Field>
-      <Field label="Available Seat" className="font-semibold text-gray-700 text-[14px]" error={errors.time}>
-        <input
-          {...register("availableSeat", { required: "This Field is required" })}
-          type="number" id="availableSeat" placeholder="available seat" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
-      </Field>
-      <Field label="Price" className="font-semibold text-gray-700 text-[14px]" error={errors.time}>
-        <input
-          {...register("price", { required: "This Field is required" })}
-          type="text" id="price" placeholder="price" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
-      </Field>
-      <Field label="Phone" className="font-semibold text-gray-700 text-[14px]" error={errors.phone}>
-        <input
-          {...register("phone", { required: "This Field is required" })}
-          type="Phone" id="phone" placeholder="Phone" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
-      </Field>
-      <Field label="Status" className="font-semibold text-gray-700 text-[14px]" error={errors.status}>
-        <select
-          {...register("status", { required: "This Field is required" })}
-          id="status" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+      {/* BASIC FIELDS */}
+      <Group className="groupBy">
+        <Field label="Launch Name">
+          <input {...register("name")} className="input" />
+        </Field>
+
+        <Field label="Seat Capacity">
+          <input
+            type="number"
+            {...register("seatCapacity")}
+            className="input"
+          />
+        </Field>
+      </Group>
+
+      <Group className="groupBy">
+        <Field label="From">
+          <input {...register("from")} className="input" />
+        </Field>
+
+        <Field label="To">
+          <input {...register("to")} className="input" />
+        </Field>
+      </Group>
+
+      <Group className="groupBy">
+        <Field label="Departure Time">
+          <input
+            type="datetime-local"
+            {...register("departureTime")}
+            className="input"
+          />
+        </Field>
+
+        <Field label="Arrival Time">
+          <input
+            type="datetime-local"
+            {...register("arrivalTime")}
+            className="input"
+          />
+        </Field>
+      </Group>
+
+      <Group className="groupBy">
+        <Field label="Available Seat">
+          <input
+            type="number"
+            {...register("availableSeat")}
+            className="input"
+          />
+        </Field>
+        <Field label="Phone">
+          <input {...register("phone")} className="input" />
+        </Field>
+      </Group>
+
+      {/* <Field label="Price">
+        <input {...register("price")} className="input" />
+      </Field> */}
+
+      {/* ================= SEAT TYPES ================= */}
+      <Card title="Seat Types" size="small" style={{ marginTop: 16 }}>
+        <Space direction="vertical" style={{ width: "100%" }}>
+          {seatTypeFields.map((field, index) => (
+            <Row
+              key={field.id}
+              gutter={10}
+              style={{
+                padding: 10,
+                border: "1px solid #eee",
+                borderRadius: 8,
+                marginBottom: 10,
+              }}
+            >
+              <Col span={8}>
+                <Controller
+                  name={`seatTypes.${index}.name`}
+                  control={control}
+                  render={({ field }) => (
+                    <Input {...field} placeholder="Seat Type Name" />
+                  )}
+                />
+              </Col>
+
+              <Col span={7}>
+                <Controller
+                  name={`seatTypes.${index}.price`}
+                  control={control}
+                  render={({ field }) => (
+                    <Input {...field} placeholder="Price" />
+                  )}
+                />
+              </Col>
+
+              <Col span={7}>
+                <Controller
+                  name={`seatTypes.${index}.available`}
+                  control={control}
+                  render={({ field }) => (
+                    <Input {...field} placeholder="Available Seats" />
+                  )}
+                />
+              </Col>
+
+              <Col span={1}>
+                <Button
+                  danger
+                  icon={<DeleteOutlined />}
+                  onClick={() => removeSeatType(index)}
+                />
+              </Col>
+            </Row>
+          ))}
+        </Space>
+
+        <Button
+          type="dashed"
+          block
+          icon={<PlusOutlined />}
+          onClick={() =>
+            appendSeatType({
+              name: "",
+              price: "",
+              available: "",
+            })
+          }
+        >
+          Add Seat Type
+        </Button>
+      </Card>
+
+      {/* OTHER FIELDS */}
+
+      <Field label="Status">
+        <select {...register("status")} className="input">
           <option value="1">Active</option>
           <option value="2">Inactive</option>
         </select>
       </Field>
-      <Field label="Image" className="font-semibold text-gray-700 text-[14px]" error={errors.image}>
-        <input
-          {...register("image", { required: "This Field is required" })}
-          type="text" id="image" placeholder="Image" className="w-full px-2 py-2 text-sm border rounded-lg border-gray-300 hover:border-blue-500 transition text-gray-600 mt-1" />
-      </Field>
-      <Field>
-        <button type="submit" className='w-full bg-blue-600 py-2 text-white rounded-lg mt-2 font-semibold border-b-2 border-blue-300 hover:bg-blue-500 transition'>{editItem ? "Update" : "Create"}</button>
-      </Field>
-    </form>
-  )
-}
 
-export default FormPage
+      <Field label="Image">
+        <input {...register("image")} className="input" />
+      </Field>
+
+        <button className="bg-blue-600 text-white py-2.5 mt-3 rounded-lg">
+          {editItem ? "Update" : "Create"}
+        </button>
+    </form>
+  );
+};
+
+export default FormPage;
