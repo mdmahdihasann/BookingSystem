@@ -14,20 +14,35 @@ export async function PUT(req, { params }) {
         to: body.to,
         departureTime: new Date(body.departureTime),
         arrivalTime: new Date(body.arrivalTime),
-        seatTypes: {
-          create: body.seatTypes.map((st) => ({
-            name: st.name,
-            price: Number(st.price),
-            available: Number(st.available),
-          })),
-        },
         phone: body.phone,
         status: body.status === true || body.status === "true",
         image: body.image,
       },
     });
 
-    return NextResponse.json({ success: true, data: updatedData });
+    if (body.seatTypes) {
+      await prisma.seatType.deleteMany({
+        where: { launchId: id },
+      });
+    }
+    if (body.seatTypes.length > 0) {
+      await prisma.seatType.createMany({
+        data: body.seatTypes.map((st) => ({
+          launchId: id,
+          name: st.name,
+          price: Number(st.price),
+          available: Number(st.available),
+          bookSeat: 0,
+        })),
+      });
+    }
+
+    const result = await prisma.launch.findUnique({
+      where: { id },
+      include: { seatTypes: true },
+    });
+
+    return NextResponse.json(result);
   } catch (error) {
     console.error("UPDATE ERROR:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
