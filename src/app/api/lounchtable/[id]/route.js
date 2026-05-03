@@ -6,7 +6,7 @@ export async function PUT(req, { params }) {
     const id = params.id;
     const body = await req.json();
 
-    const updatedData = await prisma.launch.update({
+    await prisma.launch.update({
       where: { id },
       data: {
         name: body.name,
