@@ -21,28 +21,7 @@ const FormPage = ({ onClose }) => {
     control,
     reset,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      name: "",
-      from: "",
-      to: "",
-      departureTime: "",
-      arrivalTime: "",
-      seatCapacity: "",
-      availableSeat: "",
-      price: "",
-      phone: "",
-      status: "1",
-      image: "",
-      seatTypes: [
-        {
-          name: "",
-          price: "",
-          available: "",
-        },
-      ],
-    },
-  });
+  } = useForm();
 
   const {
     fields: seatTypeFields,
@@ -54,20 +33,33 @@ const FormPage = ({ onClose }) => {
   });
 
   useEffect(() => {
-    if (!editItem) return;
-
-    reset({
-      ...editItem,
-      seatTypes: editItem.seatTypes?.length
-        ? editItem.seatTypes
-        : [
-            {
-              name: "",
-              price: "",
-              available: "",
-            },
-          ],
-    });
+    if (editItem) {
+      reset({
+        name: editItem.name || "",
+        from: editItem.from || "",
+        to: editItem.to || "",
+        departureTime: editItem.departureTime || "",
+        arrivalTime: editItem.arrivalTime || "",
+        phone: editItem.phone || "",
+        status: editItem.status || true,
+        image: editItem.image || "",
+        seatTypes: editItem.seatTypes?.length
+          ? editItem.seatTypes
+          : [{ name: "", price: "", available: "" }],
+      });
+    } else {
+      reset({
+        name: "",
+        from: "",
+        to: "",
+        departureTime: "",
+        arrivalTime: "",
+        phone: "",
+        status: true,
+        image: "",
+        seatTypes: [{ name: "", price: "", available: "" }],
+      });
+    }
   }, [editItem, reset]);
 
   const onSubmit = async (data) => {
@@ -97,14 +89,6 @@ const FormPage = ({ onClose }) => {
       <Group className="groupBy">
         <Field label="Launch Name">
           <input {...register("name")} className="input" />
-        </Field>
-
-        <Field label="Seat Capacity">
-          <input
-            type="number"
-            {...register("seatCapacity")}
-            className="input"
-          />
         </Field>
       </Group>
 
@@ -137,21 +121,13 @@ const FormPage = ({ onClose }) => {
       </Group>
 
       <Group className="groupBy">
-        <Field label="Available Seat">
-          <input
-            type="number"
-            {...register("availableSeat")}
-            className="input"
-          />
-        </Field>
         <Field label="Phone">
           <input {...register("phone")} className="input" />
         </Field>
+        <Field label="Image">
+          <input {...register("image")} className="input" />
+        </Field>
       </Group>
-
-      {/* <Field label="Price">
-        <input {...register("price")} className="input" />
-      </Field> */}
 
       {/* ================= SEAT TYPES ================= */}
       <Card title="Seat Types" size="small" style={{ marginTop: 16 }}>
@@ -227,19 +203,19 @@ const FormPage = ({ onClose }) => {
       {/* OTHER FIELDS */}
 
       <Field label="Status">
-        <select {...register("status")} className="input">
-          <option value="1">Active</option>
-          <option value="2">Inactive</option>
+        <select
+          {...register("status")}
+          className="input"
+          value={editItem?.status || true}
+        >
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
         </select>
       </Field>
 
-      <Field label="Image">
-        <input {...register("image")} className="input" />
-      </Field>
-
-        <button className="bg-blue-600 text-white py-2.5 mt-3 rounded-lg">
-          {editItem ? "Update" : "Create"}
-        </button>
+      <button className="bg-blue-600 text-white py-2.5 mt-3 rounded-lg">
+        {editItem ? "Update" : "Create"}
+      </button>
     </form>
   );
 };

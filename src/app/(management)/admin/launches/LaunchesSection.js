@@ -10,10 +10,12 @@ import { setEditItem } from "@/redux/features/lounchtable/lounchTable";
 const LaunchesSection = () => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
+
   const handleEdit = async (data) => {
     dispatch(setEditItem(data))
     setShowModal(true);
   }
+  
   const handleShow = () => {
     dispatch(setEditItem(null))
     setShowModal(true);

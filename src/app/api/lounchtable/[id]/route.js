@@ -12,24 +12,24 @@ export async function PUT(req, { params }) {
         name: body.name,
         from: body.from,
         to: body.to,
-        seatCapacity: Number(body.seatCapacity),
-        availableSeat: Number(body.availableSeat),
         departureTime: new Date(body.departureTime),
         arrivalTime: new Date(body.arrivalTime),
+        seatTypes: {
+          create: body.seatTypes.map((st) => ({
+            name: st.name,
+            price: Number(st.price),
+            available: Number(st.available),
+          })),
+        },
         phone: body.phone,
-        price: Number(body.price),
-        status: body.status === true || body.status === "true", 
-        image: body.image
+        status: body.status === true || body.status === "true",
+        image: body.image,
       },
     });
 
     return NextResponse.json({ success: true, data: updatedData });
-
   } catch (error) {
     console.error("UPDATE ERROR:", error);
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

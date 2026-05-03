@@ -22,9 +22,6 @@ CREATE TABLE "Launch" (
     "to" TEXT NOT NULL,
     "departureTime" TIMESTAMP(3) NOT NULL,
     "arrivalTime" TIMESTAMP(3) NOT NULL,
-    "seatCapacity" INTEGER NOT NULL,
-    "availableSeat" INTEGER NOT NULL,
-    "price" DOUBLE PRECISION NOT NULL,
     "phone" TEXT,
     "image" TEXT,
     "status" BOOLEAN NOT NULL DEFAULT true,
@@ -32,6 +29,18 @@ CREATE TABLE "Launch" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Launch_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SeatType" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+    "available" INTEGER NOT NULL,
+    "bookSeat" INTEGER,
+    "launchId" TEXT NOT NULL,
+
+    CONSTRAINT "SeatType_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -53,6 +62,9 @@ CREATE TABLE "Booking" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- AddForeignKey
+ALTER TABLE "SeatType" ADD CONSTRAINT "SeatType_launchId_fkey" FOREIGN KEY ("launchId") REFERENCES "Launch"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Booking" ADD CONSTRAINT "Booking_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

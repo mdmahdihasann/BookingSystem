@@ -29,29 +29,32 @@ model User {
 }
 
 model Launch {
-  id   String @id @default(uuid())
-  name String
-
-  from String
-  to   String
-
+  id            String      @id @default(uuid())
+  name          String
+  from          String
+  to            String
   departureTime DateTime
   arrivalTime   DateTime
+  phone         String?
+  image         String?
+  status        Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
-  seatCapacity  Int
-  availableSeat Int
+  seatTypes     SeatType[]
+  bookings      Booking[]
+}
 
-  price Float
+model SeatType {
+  id            String   @id @default(uuid())
+  name          String  
+  price         Float
+  available     Int      
+  bookSeat      Int?   
 
-  phone String?
-  image String?
+  launchId      String
+  launch        Launch   @relation(fields: [launchId], references: [id], onDelete: Cascade)
 
-  status Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  bookings Booking[]
 }
 
 model Booking {
