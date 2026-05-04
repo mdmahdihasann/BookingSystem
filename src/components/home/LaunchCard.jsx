@@ -73,9 +73,9 @@ const LaunchCard = ({ launch }) => {
             {/* BUTTON */}
             <div className="w-full">
               <Link
-                href="/1"
+                href={'/launches/1'}
                 className="mt-5 w-full block bg-blue-600 hover:bg-blue-700 
-               text-white py-2.5 px-6 rounded-lg font-semibold 
+               text-white py-2.5 px-6 rounded-lg font-medium 
                text-center transition-all active:scale-[0.97]"
               >
                 See Availability

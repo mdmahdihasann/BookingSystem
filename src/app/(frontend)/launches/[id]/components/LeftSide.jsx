@@ -1,0 +1,118 @@
+"use client";
+
+import Image from "next/image";
+
+import Img from "../../../../../../public/bg.jpg";
+
+import {
+  WifiOutlined,
+  CoffeeOutlined,
+  CustomerServiceOutlined,
+  RiseOutlined,
+  ClearOutlined,
+} from "@ant-design/icons";
+
+
+const facilities = [
+  {
+    name: "Non-smoking rooms",
+    icon: <RiseOutlined className="text-lg text-blue-600" />,
+  },
+  {
+    name: "Free Wifi",
+    icon: <WifiOutlined className="text-lg text-blue-600" />,
+  },
+  {
+    name: "Restaurant",
+    icon: <CoffeeOutlined className="text-lg text-blue-600" />,
+  },
+  {
+    name: "24-hour front desk",
+    icon: <CustomerServiceOutlined className="text-lg text-blue-600" />,
+  },
+  {
+    name: "Elevator",
+    icon: <RiseOutlined className="text-lg text-blue-600" />,
+  },
+  {
+    name: "Daily housekeeping",
+    icon: <ClearOutlined className="text-lg text-blue-600" />,
+  },
+];
+
+const LeftSide = () => {
+  return (
+    <div className="flex flex-col gap-6">
+      {/* image div */}
+      <div className="grid grid-cols-[2fr_1fr] gap-4">
+        <Image
+          src={Img}
+          width="100%"
+          height="100%"
+          alt="Launch Image"
+          className="rounded-xl h-full"
+        />
+        <div className="flex flex-col gap-4">
+          <Image
+            src={Img}
+            width="100%"
+            height="100%"
+            alt="Launch Image"
+            className="rounded-xl"
+          />
+          <Image
+            src={Img}
+            width="100%"
+            height="100%"
+            alt="Launch Image"
+            className="rounded-xl"
+          />
+        </div>
+      </div>
+      {/* image div */}
+      {/* content */}
+      <div>
+        <h2 className="text-2xl font-semibold mb-2">I will go</h2>
+        <p className="text-sm font-normal text-gray-600">
+          3891 Randviews Dr. Abdul kuddus chandarion 902
+        </p>
+      </div>
+      {/* features */}
+      <div>
+        <h3 className="text-md font-semibold mb-4">Hotel Features</h3>
+        <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {facilities.map((facility, index) => (
+            <li
+              key={index}
+              className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <div className="flex-shrink-0">{facility.icon}</div>
+              <div className="flex-1">
+                <span className="text-gray-700 font-medium text-sm">
+                  {facility.name}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {/* description */}
+      <div>
+        <h3 className="text-md font-semibold mb-2">Description</h3>
+        <p className="text-sm text-gray-700 leading-7">
+          Sundarban Express is a modern launch that operates daily on the Dhaka
+          to Barisal route. It offers a comfortable and safe journey with
+          various seating options including AC, Non-AC, and Boss seats. The
+          launch is equipped with modern amenities such as free WiFi, restaurant
+          facilities, charging points, and clean washrooms. With its punctual
+          departure and arrival schedule, Sundarban Express ensures a
+          hassle-free travel experience for passengers. The launch also provides
+          priority seating for women, elderly, and children, along with 24/7
+          customer support for any assistance during the journey.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default LeftSide;
