@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import BookImg from "../../../../../public/why-book/train.png";
+import BookImg from "../../../public/why-book/train.png";
 
 const WhyBooking = () => {
   return (

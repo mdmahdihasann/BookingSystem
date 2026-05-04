@@ -1,8 +1,12 @@
+import Link from "next/link";
+
 const LaunchCard = ({ launch }) => {
   return (
     <div className="flex flex-col items-end pb-20 relative">
       <div className="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <h2 className="text-2xl font-semibold text-black mb-6">Find Your Next Launch</h2>
+        <h2 className="text-2xl font-semibold text-black mb-6">
+          Find Your Next Launch
+        </h2>
       </div>
       <div className="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Card */}
@@ -49,24 +53,6 @@ const LaunchCard = ({ launch }) => {
               </div>
             </div>
 
-            {/* SEAT INFO */}
-            <div className="mt-4 space-y-2 text-sm">
-              <div className="flex justify-between bg-gray-50 px-3 py-2 rounded-lg">
-                <span>Upper Deck</span>
-                <span className="font-semibold">{launch?.upperSeat || 20}</span>
-              </div>
-
-              <div className="flex justify-between bg-gray-50 px-3 py-2 rounded-lg">
-                <span>Lower Deck</span>
-                <span className="font-semibold">{launch?.lowerSeat || 30}</span>
-              </div>
-
-              <div className="flex justify-between bg-gray-50 px-3 py-2 rounded-lg">
-                <span>Cabin (Single / VIP)</span>
-                <span className="font-semibold">{launch?.cabin || 5}</span>
-              </div>
-            </div>
-
             {/* PRICE */}
             <div className="mt-4 flex justify-between items-center">
               <div>
@@ -85,9 +71,16 @@ const LaunchCard = ({ launch }) => {
             </div>
 
             {/* BUTTON */}
-            <button className="mt-5 w-full bg-blue-600 text-white py-2.5 rounded-xl hover:bg-blue-700 transition font-semibold">
-              Book Now
-            </button>
+            <div className="w-full">
+              <Link
+                href="/1"
+                className="mt-5 w-full block bg-blue-600 hover:bg-blue-700 
+               text-white py-2.5 px-6 rounded-lg font-semibold 
+               text-center transition-all active:scale-[0.97]"
+              >
+                See Availability
+              </Link>
+            </div>
           </div>
         </div>
       </div>

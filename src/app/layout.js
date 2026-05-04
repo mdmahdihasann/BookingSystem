@@ -1,18 +1,20 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Ubuntu } from "next/font/google";
+
+
 import "./globals.css";
 import AuthProvider from "@/provider/AuthProvider";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "@/lib/Providers";
+import Headers from "@/components/Header";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+
+const ubuntu = Ubuntu({
+  weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
+  variable: "--font-ubuntu",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+
 
 export const metadata = {
   title: "Booking System",
@@ -22,17 +24,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${ubuntu.variable} font-sans antialiased`}>
         <Toaster position="top-center" reverseOrder={false} />
         <Providers>
           <AuthProvider>
+            <Headers/>
             {children}
           </AuthProvider>
         </Providers>
-
       </body>
-    </html >
+    </html>
   );
 }

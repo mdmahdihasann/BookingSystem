@@ -33,12 +33,14 @@ const page = () => {
           </p>
         </div>
       </div>
-      <div
-        className="text-sm text-white px-4 py-2.5 rounded-lg absolute top-4 left-4 
+      <Link href={"/"}>
+        <div
+          className="text-sm text-white px-4 py-2.5 rounded-lg absolute top-4 left-4 
 bg-white-500/20 backdrop-blur-md border border-white-500/20 font-serif"
-      >
-        Back to Home
-      </div>
+        >
+          Back to Home
+        </div>
+      </Link>
     </div>
   );
 };
