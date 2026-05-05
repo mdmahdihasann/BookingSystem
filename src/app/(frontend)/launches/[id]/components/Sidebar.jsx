@@ -1,10 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CheckCircleOutlined } from "@ant-design/icons";
 
 const Sidebar = () => {
   const [selectedSeatType, setSelectedSeatType] = useState();
-  const [isSelected, setIsSelected] = useState();
+  const [isSelected, setIsSelected] = useState([]);
 
   const seatTypes = [
     {
@@ -31,11 +31,21 @@ const Sidebar = () => {
   ];
 
   const currentBookedSeats = selectedSeatType?.booked || [];
-  
+
   const allSeat = Array.from(
     { length: Number(selectedSeatType?.available) },
     (_, i) => i + 1,
   );
+
+  function handleSeatSelected(seat) {
+      if (isSelected.includes(seat)) {
+        setIsSelected(isSelected.filter((s) => s !== seat));
+      } else {
+        setIsSelected([...isSelected, seat]);
+      }
+  }
+
+  const totalPrice = isSelected.length * (selectedSeatType?.price || 0);
 
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
@@ -75,7 +85,7 @@ const Sidebar = () => {
                 </div>
                 <div className="text-gray-600 text-sm">৳{seat.price}</div>
                 <div className="text-green-600 text-[10px] mt-1">
-                  ✓ {seat.available} seats available
+                  {seat.available} seats available
                 </div>
               </div>
             ))}
@@ -90,12 +100,12 @@ const Sidebar = () => {
           <div className="grid grid-cols-6 gap-2">
             {allSeat.map((seat) => {
               const isBooked = currentBookedSeats.includes(seat);
-              const slectedSeat = isSelected === seat;
+              const slectedSeat = isSelected.includes(seat);
 
               return (
                 <button
                   key={seat}
-                  onClick={() => !isBooked && setIsSelected(seat)}
+                  onClick={() => !isBooked && handleSeatSelected(seat)}
                   className={`
                     w-full py-2 border rounded-lg font-semibold transition-all relative
                     ${isBooked ? "bg-gray-300 cursor-not-allowed" : ""}
@@ -136,7 +146,9 @@ const Sidebar = () => {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Seat Number</span>
-              <span className="font-medium">{isSelected}</span>
+              <span className="font-medium">
+                {isSelected.length > 0 ? isSelected.join(', ') : 0}
+              </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Price</span>
@@ -145,9 +157,7 @@ const Sidebar = () => {
             <div className="border-t pt-2 mt-2">
               <div className="flex justify-between font-bold text-lg">
                 <span>Total Payable</span>
-                <span className="text-blue-600">
-                  ৳{selectedSeatType?.price}
-                </span>
+                <span className="text-blue-600">৳{totalPrice}</span>
               </div>
             </div>
           </div>
