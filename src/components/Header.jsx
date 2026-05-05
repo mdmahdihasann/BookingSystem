@@ -18,7 +18,7 @@ const items = [
 const Headers = () => {
   const pathname = usePathname();
   const noHeader = ["/login", "/register"];
-  const showHeader = !noHeader.includes(pathname);
+  const showHeader = !noHeader.includes(pathname) && !pathname.startsWith("/admin");
 
   return (
     <>

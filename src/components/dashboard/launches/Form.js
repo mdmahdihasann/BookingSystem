@@ -1,9 +1,11 @@
 "use client";
 
 import Field from "@/components/Field";
+import { Features, launchSeats } from "@/data/data";
 import { addRow, updateRow } from "@/redux/features/lounchtable/lounchTable";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Input, Row, Select, Space } from "antd";
+import { Button, Card, Col, Input, Row, Select, Space, Upload } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { Group } from "antd/es/radio";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -14,6 +16,16 @@ const FormPage = ({ onClose }) => {
   const editItem = useSelector((state) => state.lounchtable.editItem);
   const dispatch = useDispatch();
   const url = "/api/lounchtable";
+
+  const optionData = launchSeats.map((seat) => ({
+    value: seat,
+    label: seat,
+  }));
+
+  const optionFeatues = Features.map((seat) => ({
+    value: seat,
+    label: seat,
+  }));
 
   const {
     handleSubmit,
@@ -88,7 +100,7 @@ const FormPage = ({ onClose }) => {
       {/* BASIC FIELDS */}
       <Group className="groupBy">
         <Field label="Launch Name">
-          <input {...register("name")} className="input" />
+          <input {...register("name", {required: "Name Filed is Required"})} className="input" />
         </Field>
       </Group>
 
@@ -121,17 +133,31 @@ const FormPage = ({ onClose }) => {
       </Group>
 
       <Group className="groupBy">
+        <Field label="Start Price">
+          <input {...register("startPrice")} className="input" />
+        </Field>
         <Field label="Phone">
           <input {...register("phone")} className="input" />
         </Field>
-        <Field label="Image">
-          <input {...register("image")} className="input" />
+      </Group>
+      <Group className="groupBy">
+        <Field label="Features">
+          <Select
+            className="py-1 mt-1 rounded-lg"
+            mode="tags"
+            style={{ width: "100%" }}
+            tokenSeparators={[","]}
+            options={optionFeatues}
+          />
+        </Field>
+        <Field label="Short Description">
+          <input {...register("shortDes")} className="input" />
         </Field>
       </Group>
 
       {/* ================= SEAT TYPES ================= */}
       <Card title="Seat Types" size="small" style={{ marginTop: 16 }}>
-        <Space direction="vertical" style={{ width: "100%" }}>
+        <Space orientation="vertical" style={{ width: "100%" }}>
           {seatTypeFields.map((field, index) => (
             <Row
               key={field.id}
@@ -168,7 +194,12 @@ const FormPage = ({ onClose }) => {
                   name={`seatTypes.${index}.available`}
                   control={control}
                   render={({ field }) => (
-                    <Input {...field} placeholder="Available Seats" />
+                    <Select
+                      mode="tags"
+                      style={{ width: "100%" }}
+                      tokenSeparators={[","]}
+                      options={optionData}
+                    />
                   )}
                 />
               </Col>
@@ -192,7 +223,7 @@ const FormPage = ({ onClose }) => {
             appendSeatType({
               name: "",
               price: "",
-              available: "",
+              available: [],
             })
           }
         >
@@ -201,6 +232,19 @@ const FormPage = ({ onClose }) => {
       </Card>
 
       {/* OTHER FIELDS */}
+
+      <Field label="Description">
+        <TextArea rows={5} placeholder="Type here..." className="input" />
+      </Field>
+
+      <Field label="Image">
+        <Upload listType="picture-card" multiple className="input">
+          <div>
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+          </div>
+        </Upload>
+      </Field>
 
       <Field label="Status">
         <select

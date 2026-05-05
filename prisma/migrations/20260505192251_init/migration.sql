@@ -18,12 +18,16 @@ CREATE TABLE "User" (
 CREATE TABLE "Launch" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "shortDes" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
     "from" TEXT NOT NULL,
     "to" TEXT NOT NULL,
     "departureTime" TIMESTAMP(3) NOT NULL,
     "arrivalTime" TIMESTAMP(3) NOT NULL,
+    "startPrice" DOUBLE PRECISION NOT NULL,
     "phone" TEXT,
-    "image" TEXT,
+    "Features" JSONB,
+    "image" JSONB,
     "status" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -36,8 +40,8 @@ CREATE TABLE "SeatType" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
-    "available" INTEGER NOT NULL,
-    "bookSeat" INTEGER,
+    "available" JSONB NOT NULL,
+    "bookSeat" JSONB,
     "launchId" TEXT NOT NULL,
 
     CONSTRAINT "SeatType_pkey" PRIMARY KEY ("id")

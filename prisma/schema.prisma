@@ -31,12 +31,16 @@ model User {
 model Launch {
   id            String      @id @default(uuid())
   name          String
+  shortDes          String
+  description          String
   from          String
   to            String
   departureTime DateTime
   arrivalTime   DateTime
+  startPrice         Float
   phone         String?
-  image         String?
+  Features      Json?
+  image         Json?
   status        Boolean     @default(true)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
@@ -49,8 +53,8 @@ model SeatType {
   id            String   @id @default(uuid())
   name          String  
   price         Float
-  available     Int      
-  bookSeat      Int?   
+  available     Json     
+  bookSeat      Json?
 
   launchId      String
   launch        Launch   @relation(fields: [launchId], references: [id], onDelete: Cascade)
