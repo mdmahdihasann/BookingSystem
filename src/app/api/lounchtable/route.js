@@ -25,6 +25,10 @@ export async function POST(req) {
         departureTime: new Date(body.departureTime),
         arrivalTime: new Date(body.arrivalTime),
         phone: body.phone,
+        startPrice: Number(body.startPrice) || "",
+        shortDes: body.shortDes || "",
+        description: body.description || "",
+        Features: body.Features || [],
         seatTypes: {
           create: body.seatTypes.map((st) => ({
             name: st.name,
@@ -33,7 +37,7 @@ export async function POST(req) {
           })),
         },
         status: body.status === true || body.status === "true",
-        image: body.image,
+        image: body.image || [],
       },
     });
 

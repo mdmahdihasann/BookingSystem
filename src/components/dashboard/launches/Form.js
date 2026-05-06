@@ -5,7 +5,6 @@ import { Features, launchSeats } from "@/data/data";
 import { addRow, updateRow } from "@/redux/features/lounchtable/lounchTable";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Input, Row, Select, Space, Upload } from "antd";
-import TextArea from "antd/es/input/TextArea";
 import { Group } from "antd/es/radio";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -66,6 +65,7 @@ const FormPage = ({ onClose }) => {
         to: "",
         departureTime: "",
         arrivalTime: "",
+        description: "",
         phone: "",
         status: true,
         image: "",
@@ -100,7 +100,10 @@ const FormPage = ({ onClose }) => {
       {/* BASIC FIELDS */}
       <Group className="groupBy">
         <Field label="Launch Name">
-          <input {...register("name", {required: "Name Filed is Required"})} className="input" />
+          <input
+            {...register("name", { required: "Name Filed is Required" })}
+            className="input"
+          />
         </Field>
       </Group>
 
@@ -142,12 +145,19 @@ const FormPage = ({ onClose }) => {
       </Group>
       <Group className="groupBy">
         <Field label="Features">
-          <Select
-            className="py-1 mt-1 rounded-lg"
-            mode="tags"
-            style={{ width: "100%" }}
-            tokenSeparators={[","]}
-            options={optionFeatues}
+          <Controller
+            name="Features"
+            
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                mode="tags"
+                style={{ width: "100%" }}
+                options={optionFeatues}
+                className="!py-[4px] mt-1 rounded-lg"
+              />
+            )}
           />
         </Field>
         <Field label="Short Description">
@@ -234,27 +244,46 @@ const FormPage = ({ onClose }) => {
       {/* OTHER FIELDS */}
 
       <Field label="Description">
-        <TextArea rows={5} placeholder="Type here..." className="input" />
+        <input
+          {...register("description")}
+          placeholder="Type here..."
+          className="input"
+        />
       </Field>
 
       <Field label="Image">
-        <Upload listType="picture-card" multiple className="input">
-          <div>
-            <PlusOutlined />
-            <div style={{ marginTop: 8 }}>Upload</div>
-          </div>
-        </Upload>
+        <Controller
+          name="image"
+          control={control}
+          defaultValue={[]}
+          render={({ field }) => (
+            <Upload
+              listType="picture-card"
+              multiple
+              fileList={field.value || []}
+              beforeUpload={() => false}
+              onChange={(info) => field.onChange(info.fileList)}
+            >
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            </Upload>
+          )}
+        />
       </Field>
 
       <Field label="Status">
-        <select
-          {...register("status")}
-          className="input"
-          value={editItem?.status || true}
-        >
-          <option value="true">Active</option>
-          <option value="false">Inactive</option>
-        </select>
+        <Controller
+          name="status"
+          control={control}
+          render={({ field }) => (
+            <select {...field} className="input">
+              <option value={true}>Active</option>
+              <option value={false}>Inactive</option>
+            </select>
+          )}
+        />
       </Field>
 
       <button className="bg-blue-600 text-white py-2.5 mt-3 rounded-lg">
