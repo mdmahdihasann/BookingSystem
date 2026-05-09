@@ -75,6 +75,22 @@ const FormPage = ({ onClose }) => {
   }, [editItem, reset]);
 
   const onSubmit = async (data) => {
+    try {
+      const formData = new FormData();
+      
+      data.image.forEach((file) => {
+        formData.append("images", file.originFileObj);
+      });
+      const resUpload = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const resultUpload = await resUpload.json();
+    } catch (error) {
+      console.log(error);
+      
+    }
+
     const res = await fetch(editItem ? `${url}/${editItem.id}` : url, {
       method: editItem ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
@@ -147,7 +163,6 @@ const FormPage = ({ onClose }) => {
         <Field label="Features">
           <Controller
             name="Features"
-            
             control={control}
             render={({ field }) => (
               <Select

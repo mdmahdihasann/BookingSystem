@@ -32,9 +32,12 @@ const LaunchesTable = ({ handleEdit }) => {
       await fetch(url, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          id: data.data.id,
+          image: data.data.image,
+        }),
       });
-      dispatch(deleteRow(data));
+      dispatch(deleteRow(data.data));
       toast.success("Items Delete Successfully");
     } catch (error) {
       console.log("Delete error:", error);

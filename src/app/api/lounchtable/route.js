@@ -49,9 +49,35 @@ export async function POST(req) {
 }
 
 export async function DELETE(req) {
-  const { id } = await req.json();
-  await prisma.launch.delete({
-    where: { id },
-  });
-  return Response.json({ success: true });
+  try {
+    const body = await req.json();
+
+    const { id, images } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: "ID missing" }, { status: 400 });
+    }
+
+    if (images && images.length > 0) {
+      for (const img of images) {
+        const filePath = path.join(process.cwd(), "public", img);
+
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      }
+    }
+
+    await prisma.launch.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return NextResponse.json({ error: "Delete failed" }, { status: 500 });
+  }
 }
