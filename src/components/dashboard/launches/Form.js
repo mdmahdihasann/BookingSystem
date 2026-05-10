@@ -45,15 +45,26 @@ const FormPage = ({ onClose }) => {
 
   useEffect(() => {
     if (editItem) {
+
       reset({
         name: editItem.name || "",
         from: editItem.from || "",
         to: editItem.to || "",
+        startPrice: Number(editItem.startPrice) || "",
         departureTime: editItem.departureTime || "",
+        shortDes: editItem.shortDes || "",
+        description: editItem.description || "",
         arrivalTime: editItem.arrivalTime || "",
         phone: editItem.phone || "",
         status: editItem.status || true,
-        image: editItem.image || "",
+        Features: editItem.Features || [],
+        image:
+          editItem?.image?.map((item, index) => ({
+            uid: index.toString(),
+            name: item.name,
+            status: "done",
+            url: `/images/${item.name}`,
+          })) || [],
         seatTypes: editItem.seatTypes?.length
           ? editItem.seatTypes
           : [{ name: "", price: "", available: "" }],
@@ -63,6 +74,7 @@ const FormPage = ({ onClose }) => {
         name: "",
         from: "",
         to: "",
+        startPrice: "",
         departureTime: "",
         arrivalTime: "",
         description: "",
@@ -77,18 +89,17 @@ const FormPage = ({ onClose }) => {
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-      
+
       data.image.forEach((file) => {
         formData.append("images", file.originFileObj);
       });
       const resUpload = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
+        body: JSON.stringify(formData),
       });
       const resultUpload = await resUpload.json();
     } catch (error) {
       console.log(error);
-      
     }
 
     const res = await fetch(editItem ? `${url}/${editItem.id}` : url, {
@@ -98,6 +109,7 @@ const FormPage = ({ onClose }) => {
     });
 
     const result = await res.json();
+    
 
     if (!res.ok) {
       toast.error(result.error || "Error");
@@ -220,9 +232,10 @@ const FormPage = ({ onClose }) => {
                   control={control}
                   render={({ field }) => (
                     <Select
+                      {...field}
                       mode="tags"
                       style={{ width: "100%" }}
-                      tokenSeparators={[","]}
+                      value={field.value || []}
                       options={optionData}
                     />
                   )}

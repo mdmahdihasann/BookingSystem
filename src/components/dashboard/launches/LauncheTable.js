@@ -33,8 +33,8 @@ const LaunchesTable = ({ handleEdit }) => {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: data.data.id,
-          image: data.data.image,
+          id: data.id,
+          image: data.image,
         }),
       });
       dispatch(deleteRow(data.data));
