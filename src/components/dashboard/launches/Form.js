@@ -45,16 +45,19 @@ const FormPage = ({ onClose }) => {
 
   useEffect(() => {
     if (editItem) {
-
       reset({
         name: editItem.name || "",
         from: editItem.from || "",
         to: editItem.to || "",
         startPrice: Number(editItem.startPrice) || "",
-        departureTime: editItem.departureTime || "",
+        departureTime: editItem.departureTime
+          ? new Date(editItem?.departureTime).toISOString().slice(0, 16)
+          : "" || "",
         shortDes: editItem.shortDes || "",
         description: editItem.description || "",
-        arrivalTime: editItem.arrivalTime || "",
+        arrivalTime: editItem.arrivalTime
+          ? new Date(editItem?.arrivalTime).toISOString().slice(0, 16)
+          : "" || "",
         phone: editItem.phone || "",
         status: editItem.status || true,
         Features: editItem.Features || [],
@@ -67,7 +70,7 @@ const FormPage = ({ onClose }) => {
           })) || [],
         seatTypes: editItem.seatTypes?.length
           ? editItem.seatTypes
-          : [{ name: "", price: "", available: "" }],
+          : [{ name: "", price: "", available: [] }],
       });
     } else {
       reset({
@@ -87,40 +90,59 @@ const FormPage = ({ onClose }) => {
   }, [editItem, reset]);
 
   const onSubmit = async (data) => {
+    console.log(data);
+    
     try {
+      let uploadedImages = [];
+
+      // old image
+      const oldImages =
+        data.image?.filter((file) => file.url).map((file) => file.url) || [];
+
       const formData = new FormData();
 
       data.image.forEach((file) => {
-        formData.append("images", file.originFileObj);
+        if (file.originFileObj) {
+          formData.append("image", file.originFileObj);
+        }
       });
-      const resUpload = await fetch("/api/upload", {
-        method: "POST",
-        body: JSON.stringify(formData),
+      if (formData.has("image")) {
+        const resUpload = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const resultUpload = await resUpload.json();
+        uploadedImages = resultUpload.image || [];
+      }
+
+      const finalImages = [...oldImages, ...uploadedImages];
+
+      const finalData = {
+        ...data,
+        image: finalImages,
+      }
+
+      const res = await fetch(editItem ? `${url}/${editItem.id}` : url, {
+        method: editItem ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(finalData),
       });
-      const resultUpload = await resUpload.json();
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        toast.error(result.error || "Error");
+        return;
+      }
+
+      dispatch(editItem ? updateRow(result) : addRow(result));
+      toast.success(editItem ? "Updated Successfully" : "Created Successfully");
+
+      reset();
+      onClose();
     } catch (error) {
       console.log(error);
     }
-
-    const res = await fetch(editItem ? `${url}/${editItem.id}` : url, {
-      method: editItem ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    const result = await res.json();
-    
-
-    if (!res.ok) {
-      toast.error(result.error || "Error");
-      return;
-    }
-
-    dispatch(editItem ? updateRow(result) : addRow(result));
-    toast.success(editItem ? "Updated Successfully" : "Created Successfully");
-
-    reset();
-    onClose();
   };
 
   return (
@@ -230,6 +252,7 @@ const FormPage = ({ onClose }) => {
                 <Controller
                   name={`seatTypes.${index}.available`}
                   control={control}
+                  defaultValue={[]}
                   render={({ field }) => (
                     <Select
                       {...field}
@@ -237,6 +260,7 @@ const FormPage = ({ onClose }) => {
                       style={{ width: "100%" }}
                       value={field.value || []}
                       options={optionData}
+                      onChange={field.onChange}
                     />
                   )}
                 />

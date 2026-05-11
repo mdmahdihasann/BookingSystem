@@ -33,7 +33,7 @@ export async function POST(req) {
           create: body.seatTypes.map((st) => ({
             name: st.name,
             price: Number(st.price),
-            available: Number(st.available),
+            available: st.available,
           })),
         },
         status: body.status === true || body.status === "true",

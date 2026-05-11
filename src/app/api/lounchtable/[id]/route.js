@@ -16,7 +16,7 @@ export async function PUT(req, { params }) {
         arrivalTime: new Date(body.arrivalTime),
         phone: body.phone,
         status: body.status === true || body.status === "true",
-        image: body.image,
+        image: body.image || [],
       },
     });
 
@@ -31,7 +31,7 @@ export async function PUT(req, { params }) {
           launchId: id,
           name: st.name,
           price: Number(st.price),
-          available: Number(st.available),
+          available: st.available,
           bookSeat: 0,
         })),
       });
