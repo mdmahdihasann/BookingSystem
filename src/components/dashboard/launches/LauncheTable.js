@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   deleteRow,
   setLounchTableData,
-  updatedRow,
 } from "@/redux/features/lounchtable/lounchTable";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
@@ -14,14 +13,15 @@ import formateDate from "@/utils/formateDate";
 const LaunchesTable = ({ handleEdit }) => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.lounchtable.data);
+  
   const url = "/api/lounchtable/";
 
   useEffect(() => {
     const getData = async () => {
       const res = await fetch(url);
-      const data = await res.json();
+      const datas = await res.json();
 
-      dispatch(setLounchTableData(data));
+      dispatch(setLounchTableData(datas));
     };
 
     getData();

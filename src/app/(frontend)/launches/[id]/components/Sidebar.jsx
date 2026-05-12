@@ -2,33 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { CheckCircleOutlined } from "@ant-design/icons";
 
-const Sidebar = () => {
+const Sidebar = ({launchData}) => {
   const [selectedSeatType, setSelectedSeatType] = useState();
   const [isSelected, setIsSelected] = useState([]);
-
-  const seatTypes = [
-    {
-      name: "Boss Seat",
-      price: 2000,
-      available: 12,
-      key: "Boss",
-      booked: [4, 6, 12],
-    },
-    {
-      name: "AC Seat",
-      price: 1200,
-      available: 45,
-      key: "AC",
-      booked: [4, 43, 40],
-    },
-    {
-      name: "Non-AC Seat",
-      price: 800,
-      available: 80,
-      key: "NonAC",
-      booked: [20, 6, 70, 50],
-    },
-  ];
+  
 
   const currentBookedSeats = selectedSeatType?.booked || [];
 
@@ -38,6 +15,8 @@ const Sidebar = () => {
   );
 
   function handleSeatSelected(seat) {
+    console.log(seat);
+    
       if (isSelected.includes(seat)) {
         setIsSelected(isSelected.filter((s) => s !== seat));
       } else {
@@ -62,7 +41,7 @@ const Sidebar = () => {
             Select Seat Type
           </label>
           <div className="grid grid-cols-3 gap-3">
-            {seatTypes.map((seat) => (
+            {launchData?.seatTypes?.map((seat) => (
               <div
                 key={seat.key}
                 onClick={() => setSelectedSeatType(seat)}
@@ -85,7 +64,7 @@ const Sidebar = () => {
                 </div>
                 <div className="text-gray-600 text-sm">৳{seat.price}</div>
                 <div className="text-green-600 text-[10px] mt-1">
-                  {seat.available} seats available
+                  {seat.available.length} seats available
                 </div>
               </div>
             ))}
@@ -98,7 +77,7 @@ const Sidebar = () => {
           </label>
 
           <div className="grid grid-cols-6 gap-2">
-            {allSeat.map((seat) => {
+            {selectedSeatType?.available?.map((seat) => {
               const isBooked = currentBookedSeats.includes(seat);
               const slectedSeat = isSelected.includes(seat);
 

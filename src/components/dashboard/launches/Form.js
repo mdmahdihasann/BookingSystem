@@ -62,11 +62,10 @@ const FormPage = ({ onClose }) => {
         status: editItem.status || true,
         Features: editItem.Features || [],
         image:
-          editItem?.image?.map((item, index) => ({
+          editItem?.image?.map((img, index) => ({
             uid: index.toString(),
-            name: item.name,
-            status: "done",
-            url: `/images/${item.name}`,
+            name: img.split("/").pop(),
+            url: img,
           })) || [],
         seatTypes: editItem.seatTypes?.length
           ? editItem.seatTypes
@@ -81,6 +80,7 @@ const FormPage = ({ onClose }) => {
         departureTime: "",
         arrivalTime: "",
         description: "",
+        Features: "",
         phone: "",
         status: true,
         image: "",
@@ -90,8 +90,6 @@ const FormPage = ({ onClose }) => {
   }, [editItem, reset]);
 
   const onSubmit = async (data) => {
-    console.log(data);
-    
     try {
       let uploadedImages = [];
 
@@ -112,6 +110,7 @@ const FormPage = ({ onClose }) => {
           body: formData,
         });
         const resultUpload = await resUpload.json();
+
         uploadedImages = resultUpload.image || [];
       }
 
@@ -120,7 +119,7 @@ const FormPage = ({ onClose }) => {
       const finalData = {
         ...data,
         image: finalImages,
-      }
+      };
 
       const res = await fetch(editItem ? `${url}/${editItem.id}` : url, {
         method: editItem ? "PUT" : "POST",

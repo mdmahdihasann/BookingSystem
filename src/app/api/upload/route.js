@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const formData = await req.formData();
-    const files = formData.getAll("images");
+    const files = formData.getAll("image");
     const uploadDir = path.join(process.cwd(), "public/images");
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });

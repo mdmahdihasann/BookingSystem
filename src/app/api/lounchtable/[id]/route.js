@@ -1,6 +1,23 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+export async function GET(req, { params }) {
+  try {
+    const data = await prisma.launch.findUnique({
+      where: {
+        id: params.id,
+      },
+      include: {
+        seatTypes: true,
+      },
+    });
+
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json({ error: "Data not found" }, { status: 500 });
+  }
+}
+
 export async function PUT(req, { params }) {
   try {
     const id = params.id;
@@ -14,6 +31,7 @@ export async function PUT(req, { params }) {
         to: body.to,
         departureTime: new Date(body.departureTime),
         arrivalTime: new Date(body.arrivalTime),
+        Features: body.Features || [],
         phone: body.phone,
         status: body.status === true || body.status === "true",
         image: body.image || [],
