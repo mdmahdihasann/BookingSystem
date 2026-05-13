@@ -67,7 +67,7 @@ model Booking {
   userId   String
   launchId String
 
-  seatNumber     String
+  seatNumber     Json?
   passengerName  String
   passengerPhone String?
 

@@ -44,7 +44,7 @@ export default function LaunchDetailsPage() {
             ),
           },
           {
-            title: <span className="text-gray-400 text-sm">MV Parhan 10</span>,
+            title: <span className="text-gray-400 text-sm">{launchData?.name}</span>,
           },
         ]}
       />
