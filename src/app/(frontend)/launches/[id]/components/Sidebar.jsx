@@ -1,27 +1,35 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CheckCircleOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
+import { Radio } from "antd";
 
-const Sidebar = ({launchData}) => {
+const Sidebar = ({ launchData }) => {
+  const router = useRouter();
   const [selectedSeatType, setSelectedSeatType] = useState();
   const [isSelected, setIsSelected] = useState([]);
-  
+  const [bookData, setBookData] = useState();
+  const [journey, setJourney] = useState();
 
   const currentBookedSeats = selectedSeatType?.booked || [];
 
-  const allSeat = Array.from(
-    { length: Number(selectedSeatType?.available) },
-    (_, i) => i + 1,
-  );
+  function handleCheckout() {
+    setBookData({
+      id: launchData?.id,
+      seatType: selectedSeatType?.name,
+      seatNumber: isSelected,
+      price: totalPrice,
+    });
+    router?.push("/booking");
+  }
+  
 
   function handleSeatSelected(seat) {
-    console.log(seat);
-    
-      if (isSelected.includes(seat)) {
-        setIsSelected(isSelected.filter((s) => s !== seat));
-      } else {
-        setIsSelected([...isSelected, seat]);
-      }
+    if (isSelected.includes(seat)) {
+      setIsSelected(isSelected.filter((s) => s !== seat));
+    } else {
+      setIsSelected([...isSelected, seat]);
+    }
   }
 
   const totalPrice = isSelected.length * (selectedSeatType?.price || 0);
@@ -36,6 +44,15 @@ const Sidebar = ({launchData}) => {
       </div>
 
       <div className="p-6">
+        <div className="mb-6">
+          <label className="block text-gray-700 font-semibold mb-3">
+            Select Journey
+          </label>
+          <Radio.Group>
+            <Radio value={launchData?.from}>{launchData?.from}</Radio>
+            <Radio value={launchData?.to}>{launchData?.to}</Radio>
+          </Radio.Group>
+        </div>
         <div className="mb-6">
           <label className="block text-gray-700 font-semibold mb-3">
             Select Seat Type
@@ -126,7 +143,7 @@ const Sidebar = ({launchData}) => {
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Seat Number</span>
               <span className="font-medium">
-                {isSelected.length > 0 ? isSelected.join(', ') : 0}
+                {isSelected.length > 0 ? isSelected.join(", ") : 0}
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -142,7 +159,10 @@ const Sidebar = ({launchData}) => {
           </div>
         </div>
 
-        <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+        <button
+          onClick={() => handleCheckout()}
+          className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+        >
           Book Now
         </button>
 

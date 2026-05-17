@@ -70,6 +70,8 @@ model Booking {
   seatNumber     Json?
   passengerName  String
   passengerPhone String?
+  seatType String?
+  journey String?
 
   price  Float
   status String @default("PENDING")
