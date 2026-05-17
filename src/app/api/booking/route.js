@@ -12,6 +12,7 @@ export async function POST(req) {
         passengerName: body.passengerName,
         passengerPhone: body.passengerPhone,
         seatNumber: body.seatNumber,
+        journey: body.journey,
         seatType: body.seatType,
         bookingDate: new Date(body.bookingDate),
         price: Number(body.price),

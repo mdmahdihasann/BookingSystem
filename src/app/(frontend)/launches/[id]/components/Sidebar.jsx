@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { Radio } from "antd";
@@ -19,10 +19,10 @@ const Sidebar = ({ launchData }) => {
       seatType: selectedSeatType?.name,
       seatNumber: isSelected,
       price: totalPrice,
+      journey: journey,
     });
     router?.push("/booking");
   }
-  
 
   function handleSeatSelected(seat) {
     if (isSelected.includes(seat)) {
@@ -48,7 +48,10 @@ const Sidebar = ({ launchData }) => {
           <label className="block text-gray-700 font-semibold mb-3">
             Select Journey
           </label>
-          <Radio.Group>
+          <Radio.Group
+            onChange={(e) => setJourney(e.target.value)}
+            value={journey}
+          >
             <Radio value={launchData?.from}>{launchData?.from}</Radio>
             <Radio value={launchData?.to}>{launchData?.to}</Radio>
           </Radio.Group>
@@ -60,8 +63,11 @@ const Sidebar = ({ launchData }) => {
           <div className="grid grid-cols-3 gap-3">
             {launchData?.seatTypes?.map((seat) => (
               <div
-                key={seat.key}
-                onClick={() => setSelectedSeatType(seat)}
+                key={seat?.key}
+                onClick={() => {
+                  setSelectedSeatType(seat);
+                  setIsSelected([]);
+                }}
                 className={`
                   rounded-xl p-2 cursor-pointer transition-all relative
                   ${
@@ -77,11 +83,11 @@ const Sidebar = ({ launchData }) => {
                 <div
                   className={`font-bold text-sm mb-1 ${selectedSeatType === seat.key ? "text-blue-600" : "text-gray-700"}`}
                 >
-                  {seat.name}
+                  {seat?.name}
                 </div>
                 <div className="text-gray-600 text-sm">৳{seat.price}</div>
                 <div className="text-green-600 text-[10px] mt-1">
-                  {seat.available.length} seats available
+                  {seat?.available?.length} seats available
                 </div>
               </div>
             ))}
