@@ -1,26 +1,32 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { Radio } from "antd";
+import { useDispatch } from "react-redux";
+import { setBookingDetails } from "@/redux/features/bookingDetails/bookingDetails";
 
 const Sidebar = ({ launchData }) => {
   const router = useRouter();
   const [selectedSeatType, setSelectedSeatType] = useState();
   const [isSelected, setIsSelected] = useState([]);
-  const [bookData, setBookData] = useState();
   const [journey, setJourney] = useState();
+  const dispatch = useDispatch();
 
   const currentBookedSeats = selectedSeatType?.booked || [];
 
   function handleCheckout() {
-    setBookData({
+    const data = {
       id: launchData?.id,
+      lounch: launchData?.name,
+      perSeatPrice: selectedSeatType?.price,
       seatType: selectedSeatType?.name,
       seatNumber: isSelected,
       price: totalPrice,
       journey: journey,
-    });
+    };
+    
+    dispatch(setBookingDetails(data));
     router?.push("/booking");
   }
 
@@ -63,7 +69,7 @@ const Sidebar = ({ launchData }) => {
           <div className="grid grid-cols-3 gap-3">
             {launchData?.seatTypes?.map((seat) => (
               <div
-                key={seat?.key}
+                key={seat?.id}
                 onClick={() => {
                   setSelectedSeatType(seat);
                   setIsSelected([]);
