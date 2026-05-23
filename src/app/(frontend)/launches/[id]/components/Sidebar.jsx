@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Radio } from "antd";
 import { useDispatch } from "react-redux";
 import { setBookingDetails } from "@/redux/features/bookingDetails/bookingDetails";
+import { useAuth } from "@/hooks/useAuth";
 
 const Sidebar = ({ launchData }) => {
   const router = useRouter();
@@ -12,22 +13,27 @@ const Sidebar = ({ launchData }) => {
   const [isSelected, setIsSelected] = useState([]);
   const [journey, setJourney] = useState();
   const dispatch = useDispatch();
+  const { auth } = useAuth();
 
   const currentBookedSeats = selectedSeatType?.booked || [];
 
   function handleCheckout() {
-    const data = {
-      id: launchData?.id,
-      lounch: launchData?.name,
-      perSeatPrice: selectedSeatType?.price,
-      seatType: selectedSeatType?.name,
-      seatNumber: isSelected,
-      price: totalPrice,
-      journey: journey,
-    };
-    
-    dispatch(setBookingDetails(data));
-    router?.push("/booking");
+    if (auth) {
+      const data = {
+        id: launchData?.id,
+        lounch: launchData?.name,
+        perSeatPrice: selectedSeatType?.price,
+        seatType: selectedSeatType?.name,
+        seatNumber: isSelected,
+        price: totalPrice,
+        journey: journey,
+      };
+
+      dispatch(setBookingDetails(data));
+      router?.push("/booking");
+    } else {
+      router?.push("/login");
+    }
   }
 
   function handleSeatSelected(seat) {
