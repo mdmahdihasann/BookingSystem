@@ -23,12 +23,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${ubuntu.variable} font-sans antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        suppressHydrationWarning
+        className={`${ubuntu.variable} font-sans antialiased`}
+      >
         <Toaster position="top-center" reverseOrder={false} />
         <Providers>
           <AuthProvider>
-            <Headers/>
+            <Headers />
             {children}
           </AuthProvider>
         </Providers>

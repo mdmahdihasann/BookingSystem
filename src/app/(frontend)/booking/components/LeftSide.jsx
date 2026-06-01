@@ -1,15 +1,19 @@
 "use client";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useAuth } from "@/hooks/useAuth";
+import { useSelector } from "react-redux";
 
 const LeftSide = () => {
   const url = "/api/booking";
   const { register, handleSubmit } = useForm();
+  const {auth} = useAuth();
+  const bookingData = useSelector((state)=> state.bookingDetails?.data);
 
   const onSubmit = async (data) => {
     const res = await fetch(url, {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify({...data, userId: auth?.user?.id , launchId: bookingData?.id, price: bookingData?.price, seatNumber: bookingData?.seatNumber, journey: bookingData?.journey, seatType: bookingData?.seatType, seatNumber: bookingData?.seatNumber, bookingDate: data.bookingDate, price: bookingData?.price}),
     });
     const result = await res.json();
     console.log(result);

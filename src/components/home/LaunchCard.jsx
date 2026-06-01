@@ -28,7 +28,9 @@ const LaunchCard = () => {
       <div className="max-w-7xl mx-auto px-4 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Card */}
         {launchAllData?.length > 0
-          ? launchAllData?.map((launch) => <Card launch={launch} />)
+          ? launchAllData?.map((launch) => (
+              <Card key={launch?.id} launch={launch} />
+            ))
           : ""}
       </div>
     </div>

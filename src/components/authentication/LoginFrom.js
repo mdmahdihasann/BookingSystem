@@ -5,10 +5,12 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { loginUser } from '@/lib/auth'
+import { useAuth } from "@/hooks/useAuth";
 
 
 const LoginFrom = () => {
     const router = useRouter();
+    const {setAuth} = useAuth();
     const { register, handleSubmit } = useForm();
     const onSubmit = async (data) => {
         try {
@@ -19,6 +21,7 @@ const LoginFrom = () => {
             })
             const logData = await res.json();
             loginUser(logData)
+            setAuth(logData);
             if (res.status === 200) {
                 if (logData.user.role === "admin") {
                     router.push("/admin/dashboard/")
