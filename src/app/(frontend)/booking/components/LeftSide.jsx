@@ -3,20 +3,35 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/useAuth";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 const LeftSide = () => {
   const url = "/api/booking";
+  const router = useRouter();
   const { register, handleSubmit } = useForm();
-  const {auth} = useAuth();
-  const bookingData = useSelector((state)=> state.bookingDetails?.data);
+  const { auth } = useAuth();
+  const bookingData = useSelector((state) => state.bookingDetails?.data);
 
   const onSubmit = async (data) => {
     const res = await fetch(url, {
       method: "POST",
-      body: JSON.stringify({...data, userId: auth?.user?.id , launchId: bookingData?.id, price: bookingData?.price, seatNumber: bookingData?.seatNumber, journey: bookingData?.journey, seatType: bookingData?.seatType, seatNumber: bookingData?.seatNumber, bookingDate: data.bookingDate, price: bookingData?.price}),
+      body: JSON.stringify({
+        ...data,
+        userId: auth?.user?.id,
+        launchId: bookingData?.id,
+        price: bookingData?.price,
+        seatNumber: bookingData?.seatNumber,
+        journey: bookingData?.journey,
+        seatType: bookingData?.seatType,
+        seatNumber: bookingData?.seatNumber,
+        bookingDate: data.bookingDate,
+        price: bookingData?.price,
+      }),
     });
     const result = await res.json();
-    console.log(result);
+    if (result) {
+      router.push(`/order-success?id=${result?.bookingId}`);
+    }
   };
 
   return (
