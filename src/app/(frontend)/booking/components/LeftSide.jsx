@@ -30,7 +30,7 @@ const LeftSide = () => {
     });
     const result = await res.json();
     if (result) {
-      router.push(`/order-success?id=${result?.bookingId}`);
+      router.push(`/order-success`);
     }
   };
 
