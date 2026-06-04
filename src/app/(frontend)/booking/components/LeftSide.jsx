@@ -6,15 +6,18 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
 const LeftSide = () => {
-  const url = "/api/booking";
+  // const url = "/api/booking";
   const router = useRouter();
   const { register, handleSubmit } = useForm();
   const { auth } = useAuth();
   const bookingData = useSelector((state) => state.bookingDetails?.data);
 
   const onSubmit = async (data) => {
-    const res = await fetch(url, {
+    const res = await fetch("/api/booking", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         ...data,
         userId: auth?.user?.id,
@@ -30,7 +33,7 @@ const LeftSide = () => {
     });
     const result = await res.json();
     if (result) {
-      router.push(`/order-success`);
+      router.push(`/order-success/${result?.id}`);
     }
   };
 

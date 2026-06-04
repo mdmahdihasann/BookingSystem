@@ -24,6 +24,7 @@ const Sidebar = ({ launchData }) => {
         lounch: launchData?.name,
         perSeatPrice: selectedSeatType?.price,
         seatType: selectedSeatType?.name,
+        seatTypeId: selectedSeatType?.id,
         seatNumber: isSelected,
         price: totalPrice,
         journey: journey,

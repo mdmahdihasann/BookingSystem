@@ -1,16 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-  export async function GET(req, { params }) {
-    const { id } = await params;
-    const data = await prisma.booking.findUnique({
-      where: {
-        id: id
-      }
-    });
-    return Response.json(data);
-  }
-
 
 export async function POST(req) {
   try {
@@ -23,8 +13,8 @@ export async function POST(req) {
         passengerName: body.passengerName,
         passengerPhone: body.passengerPhone,
         seatNumber: body.seatNumber,
-        journey: body.journey,
         seatType: body.seatType,
+        journey: body.journey,
         bookingDate: new Date(body.bookingDate),
         price: Number(body.price),
         status: body.status || "PENDING",
